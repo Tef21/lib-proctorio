@@ -28,3 +28,19 @@ class Normalizer
         return http_build_query($params);
     }
 }
+//public static string ToNormalizedString (this NameValueCollection collection, IList<string> excludedNames = null) {
+//    List<KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>> ();
+//
+//            foreach (string key in collection.AllKeys) {
+//        if (excludedNames != null && excludedNames.Contains (key)) continue;
+//
+//        string value = collection[key] ?? string.Empty;
+//                list.Add (new KeyValuePair<string, string> (HttpUtility.UrlDecode (key).ToRfc3986EncodedString (), HttpUtility.UrlDecode (value).ToRfc3986EncodedString ()));
+//            }
+//
+//            StringBuilder normalizedString = new StringBuilder ();
+//
+//            foreach (KeyValuePair<string, string> pair in list) normalizedString.Append ('&').Append (pair.Key).Append ('=').Append (pair.Value);
+//
+//            return normalizedString.ToString ().TrimStart ('&');
+//        }
