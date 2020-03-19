@@ -5,21 +5,21 @@ Proctorio POC
 
 ###Endpoints & Methods  
 Follow these key points about passing data correctly to Proctorio:  
-● For the launch API, post all data to:  https://{account region}5499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8  
-● The service supports only data submitted HTTP POST, akin to method=post in HTML  forms or -data parameter if using cURL.  
-● The service only handles one launch URL at a time through each POST.  
-● The launch URLs must be 100% self-contained, meaning being fully ready to take the user  to an authenticated session without additional authentication.  
-● HTTPS must be used when generating the URLs  
-● Only TLS 1.2 and 1.3 are supported. 
+- For the launch API, post all data to:  https://{account region}5499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8  
+- The service supports only data submitted HTTP POST, akin to method=post in HTML  forms or -data parameter if using cURL.  
+- The service only handles one launch URL at a time through each POST.  
+- The launch URLs must be 100% self-contained, meaning being fully ready to take the user  to an authenticated session without additional authentication.  
+- HTTPS must be used when generating the URLs  
+- Only TLS 1.2 and 1.3 are supported. 
 
 
 ###Authorization
 The string consists of the HTTP method (in uppercase), base URL, and Parameters in a single  string.  
-1. Convert the HTTP method to uppercase  
-2. Append an “&” character  
-3. Percent encode the absolute URL and append  
-4. Append an “&” character  
-5. Percent encode the parameter string and append   
+- Convert the HTTP method to uppercase  
+- Append an “&” character  
+- Percent encode the absolute URL and append  
+- Append an “&” character  
+- Percent encode the parameter string and append   
 
 Note: Oauth should not be assumed
 
