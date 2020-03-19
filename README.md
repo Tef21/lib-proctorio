@@ -3,7 +3,7 @@ Proctorio POC
 
 
 
-###Endpoints & Methods  
+### Endpoints & Methods  
 Follow these key points about passing data correctly to Proctorio:  
 - For the launch API, post all data to:  https://{account region}5499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8  
 - The service supports only data submitted HTTP POST, akin to method=post in HTML  forms or -data parameter if using cURL.  
@@ -13,7 +13,7 @@ Follow these key points about passing data correctly to Proctorio: 
 - Only TLS 1.2 and 1.3 are supported. 
 
 
-###Authorization
+### Authorization
 The string consists of the HTTP method (in uppercase), base URL, and Parameters in a single  string.  
 - Convert the HTTP method to uppercase  
 - Append an “&” character  
@@ -23,7 +23,7 @@ The string consists of the HTTP method (in uppercase), base URL, and Parameters 
 
 Note: Oauth should not be assumed
 
-###Parameters
+### Parameters
 ```
 ProctorioConfig::LAUNCH_URL,
 ProctorioConfig::OAUTH_CONSUMER_KEY,
