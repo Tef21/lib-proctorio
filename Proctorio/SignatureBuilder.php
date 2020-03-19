@@ -24,14 +24,14 @@ namespace Proctorio;
 class SignatureBuilder
 {
 
-    public const POST_MANHOOD = "POST";
+    public const POST_MANHOOD = 'POST';
     public const SECRET = 'ebabaef70e234f33a346dbc5f4547283';
 
     public function buildSignature(
         Encoder $encoder,
         Normalizer $normalizer,
         array $payload
-    )
+    ): string
     {
         $signatureBaseString = self::POST_MANHOOD . '&' . $encoder->encode(ProctorioConfig::PROCTORIO_URL);
         $signatureBaseString .= '&' . $encoder->encode($normalizer->normalize($payload));

@@ -54,7 +54,7 @@ class ProctorioProvider
         return $requestBuilder->buildRequest($requestPayloadString);
     }
 
-    private function buildPayload()
+    private function buildPayload(): array
     {
         $this->time = time();
         return
@@ -79,17 +79,17 @@ class ProctorioProvider
         return new RequestBuilder();
     }
 
-    private function getProctorioConfig()
+    private function getProctorioConfig(): ProctorioConfig
     {
         return new ProctorioConfig();
     }
 
-    private function getEncoder()
+    private function getEncoder(): Encoder
     {
         return new Encoder();
     }
 
-    private function getNormilizer()
+    private function getNormilizer(): Normalizer
     {
         return new Normalizer();
     }
@@ -101,7 +101,7 @@ class ProctorioProvider
      * @return string
      * @return string
      */
-    private function createSignatureBaseString(Encoder $encoder, Normalizer $normalizer, array $payload)
+    private function createSignatureBaseString(Encoder $encoder, Normalizer $normalizer, array $payload): string
     {
         return (new SignatureBuilder())->buildSignature($encoder, $normalizer, $payload);
     }

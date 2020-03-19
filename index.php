@@ -18,12 +18,15 @@
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+/**
+ * @param $pClassName
+ */
 function my_autoload($pClassName)
 {
-    include(__DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $pClassName) . ".php");
+    include(__DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $pClassName) . '.php');
 }
 
-spl_autoload_register("my_autoload");
+spl_autoload_register('my_autoload');
 
 use Proctorio\ProctorioService;
 
