@@ -65,15 +65,9 @@ The request sample below is written in C# (sharp):   
 ### Error Codes 
 
 1. [2653] = Missing required parameters 
-
 2. [2654] = Invalid parameter 
-
 3. [2655] = Incorrect consumer key 
-
 4. [2656] = Signature is invalid 
-
 5. [2657] = The used timestamp is out of range 
-
 6. [2658] = Invalid exam tag ID 
-
 7. [2659] = Invalid settings 
