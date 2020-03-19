@@ -145,6 +145,7 @@ class ProctorioConfig
         return [
             self::LAUNCH_URL => $this->getDefaultValue($parameters, self::LAUNCH_URL, self::PROCTORIO_URL),
             self::USER_ID => $this->getDefaultValue($parameters, self::USER_ID),
+            self::OAUTH_CONSUMER_KEY => $this->getDefaultValue($parameters, self::OAUTH_CONSUMER_KEY),
             self::EXAM_START => $this->getDefaultValue($parameters, self::EXAM_START),
             self::EXAM_TAKE => $this->getDefaultValue($parameters, self::EXAM_TAKE),
             self::EXAM_END => $this->getDefaultValue($parameters, self::EXAM_END),
@@ -152,7 +153,6 @@ class ProctorioConfig
             self::FULL_NAME => $this->getDefaultValue($parameters, self::FULL_NAME),
             self::EXAM_TAG => $this->getDefaultValue($parameters, self::EXAM_TAG),
 
-            self::OAUTH_CONSUMER_KEY => $this->getDefaultValue($parameters, self::OAUTH_CONSUMER_KEY),
             self::OAUTH_SIGNATURE_METHOD => self::HMAC_SHA_1,
             self::OAUTH_VERSION => $this->getDefaultValue($parameters, self::OAUTH_VERSION, self::DEFAULT_OAUTH_VERSION),
             self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP),

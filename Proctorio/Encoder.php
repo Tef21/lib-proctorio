@@ -24,7 +24,7 @@ class Encoder
 {
     public function encode(string $value): string
     {
-        return urlencode($value);
+        return rawurlencode($value);
     }
 
 }

@@ -23,7 +23,7 @@ namespace Proctorio;
 class RequestBuilder
 {
 
-    public function buildRequest(string $payload)
+    public function buildRequest($payload)
     {
         // init the resource
         $ch = curl_init();
@@ -32,7 +32,7 @@ class RequestBuilder
             CURLOPT_URL => ProctorioConfig::PROCTORIO_URL,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $payload,
+            CURLOPT_POSTFIELDS => $payload, //bla=bla&bla2=ba
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
             CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded'],
@@ -41,13 +41,14 @@ class RequestBuilder
         // execute
         $output = curl_exec($ch);
 
+        $info = curl_getinfo($ch);
+
+        var_dump($info);
+
 
         if (curl_errno($ch)) {
-            print curl_error($ch);
+            var_dump(curl_error($ch));
         }
-
-        var_export($output);
-
 
         // free
         curl_close($ch);

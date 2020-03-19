@@ -48,7 +48,7 @@ class ProctorioProvider
         $signatureBaseString = $this->createSignatureBaseString($encoder, $normalizer, $requestPayload);
         $requestPayload['oauth_signature'] = $signatureBaseString;
 
-        $requestPayloadString = $encoder->encode($normalizer->normalize($requestPayload));
+        $requestPayloadString = $normalizer->normalize($requestPayload);
 
 
         return $requestBuilder->buildRequest($requestPayloadString);
@@ -59,16 +59,16 @@ class ProctorioProvider
         $this->time = time();
         return
             [
-                ProctorioConfig::LAUNCH_URL => ProctorioConfig::PROCTORIO_URL,
+                ProctorioConfig::LAUNCH_URL => 'https://qa.eu.preprod.premium.taocloud.org/tao/Main/login',
                 ProctorioConfig::USER_ID => 'mike' . number_format(microtime(true), 0, '', ''),
+                ProctorioConfig::OAUTH_CONSUMER_KEY => self::TESTING_KEY,
                 ProctorioConfig::EXAM_START => 'https://qa.eu.preprod.premium.taocloud.org/tao/Main/login',
                 ProctorioConfig::EXAM_TAKE => 'https://qa.eu.preprod.premium.taocloud.org/taoDelivery/DeliveryServer/runDeliveryExecution?deliveryExecution=kve_de_https%3A%2F%2Flutpr01oax.eu.premium.taocloud.org%2F%23i158453786611691892',
                 ProctorioConfig::EXAM_END => 'https://qa.eu.preprod.premium.taocloud.org/taoDelivery/DeliveryServer/index',
-                ProctorioConfig::EXAM_SETTINGS => 'notabs,clipboard',
+                ProctorioConfig::EXAM_SETTINGS => 'webtraffic,recordvideo',
                 ProctorioConfig::FULL_NAME => 'Mike OAT.SA',
                 ProctorioConfig::EXAM_TAG => 'oatsa-testing-TAG',
 
-                ProctorioConfig::OAUTH_CONSUMER_KEY => self::TESTING_KEY,
                 ProctorioConfig::OAUTH_TIMESTAMP => $this->time,
                 ProctorioConfig::OAUTH_NONCE => sha1('mike' . number_format(microtime(true))),
             ];

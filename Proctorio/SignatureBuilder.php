@@ -33,7 +33,7 @@ class SignatureBuilder
         array $payload
     )
     {
-        $signatureBaseString = $encoder->encode(self::POST_MANHOOD . '&' . ProctorioConfig::PROCTORIO_URL);
+        $signatureBaseString = self::POST_MANHOOD . '&' . $encoder->encode(ProctorioConfig::PROCTORIO_URL);
         $signatureBaseString .= '&' . $encoder->encode($normalizer->normalize($payload));
         //     string signature_base_string = "POST&" +
         //     ("https://us15499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8").ToRfc3986EncodedString ()
@@ -48,6 +48,8 @@ class SignatureBuilder
         //    byte[] hashBytes = hmacsha1.ComputeHash (dataBuffer);
         //    // BASE64 ENCODED
         //     string oauth_signature = Convert.ToBase64String(hashBytes);
+
+        echo $signatureBaseString;
 
         return $computed_signature;
     }
