@@ -29,5 +29,4 @@ class ProctorioService
 
         return $provider->retrieve();
     }
-
 }

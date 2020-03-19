@@ -75,11 +75,11 @@ class ProctorioProvider
 //                    'https://qa.eu.preprod.premium.taocloud.org/taoDelivery/DeliveryServer/index',
                 ProctorioConfig::EXAM_SETTINGS => 'webtraffic',
                 //'fullscreenmoderate,notabs',
-                ProctorioConfig::FULL_NAME => 'name',//there might be an issue with spaces inside the string
+                ProctorioConfig::FULL_NAME => 'name withSpace',//there might be an issue with spaces inside the string
                 ProctorioConfig::EXAM_TAG => 'tag',
                 //'oatsa-testing-TAG',
                 ProctorioConfig::OAUTH_TIMESTAMP => $this->time,
-                ProctorioConfig::OAUTH_NONCE => 'mike123456nounce12',
+                ProctorioConfig::OAUTH_NONCE => 'mike123456nounce123',
             ];
     }
 

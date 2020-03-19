@@ -23,7 +23,6 @@ namespace Proctorio;
 
 class SignatureBuilder
 {
-
     public const POST_MANHOOD = 'POST';
     public const SECRET = 'ebabaef70e234f33a346dbc5f4547283';
 
@@ -40,27 +39,8 @@ class SignatureBuilder
             . '&'
             . $encoder->encode($normalizer->normalize($payload));
 
-        //     string signature_base_string = "POST&" +
-        //     ("https://us15499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8").ToRfc3986EncodedString ()
-        //      + "&"
-        //      + parameters.ToNormalizedString().ToRfc3986EncodedString();
-
-        echo '<pre>';
-        echo $signatureBaseString . PHP_EOL;
-        echo '</pre>';
-
         $computedSignature = hash_hmac('sha1', $signatureBaseString, self::SECRET, true);
-
-        $base64Encoded = base64_encode($computedSignature);
-        //
-        //    HMACSHA1 hmacsha1 = new HMACSHA1 ();
-        //    hmacsha1.Key = Encoding.ASCII.GetBytes ("INSERT SECRET HERE");
-        //    byte[] dataBuffer = Encoding.ASCII.GetBytes (signature_base_string);
-        //    byte[] hashBytes = hmacsha1.ComputeHash (dataBuffer);
-        //    // BASE64 ENCODED
-        //     string oauth_signature = Convert.ToBase64String(hashBytes);
-
-        return $base64Encoded;
+        return base64_encode($computedSignature);
     }
 
 }

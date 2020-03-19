@@ -23,6 +23,12 @@ namespace Proctorio;
 class RequestBuilder
 {
 
+    /**
+     * allows us to see the curl_getinfo
+     * @var bool
+     */
+    public $debug;
+
     public function buildRequest($payload)
     {
         // init the resource
@@ -41,10 +47,6 @@ class RequestBuilder
         // execute
         $output = curl_exec($ch);
 
-        $info = curl_getinfo($ch);
-
-        var_dump($info);
-
 
         if (curl_errno($ch)) {
             var_dump(curl_error($ch));
@@ -52,6 +54,10 @@ class RequestBuilder
 
         // free
         curl_close($ch);
+
+        if ($this->debug) {
+            curl_getinfo($ch);
+        }
 
         return $output;
     }
