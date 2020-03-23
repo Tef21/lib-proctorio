@@ -42,10 +42,7 @@ class ProctorioProvider
 
         $requestPayload = $config->configure($payload);
 
-        //signature
         $signature = $this->createSignature($encoder, $normalizer, $requestPayload);
-
-        echo $signature . PHP_EOL;
 
         $requestPayload['oauth_signature'] = $signature;
 
@@ -59,25 +56,17 @@ class ProctorioProvider
     {
         $this->time = time();
 
-        echo $this->time . PHP_EOL;
-
         return
             [
                 ProctorioConfig::LAUNCH_URL => ProctorioConfig::PROCTORIO_URL,
-                //'https://qa.eu.preprod.premium.taocloud.org/ltiDeliveryProvider/DeliveryTool/launch/eyJkZWxpdmVyeSI6Imh0dHBzOlwvXC9sdXRwcjAxb2F4LmV1LnByZW1pdW0udGFvY2xvdWQub3JnXC8jaTE1ODA0ODc3NzAyOTg5MjIzIn0=',
                 ProctorioConfig::USER_ID => 'mike123456',
                 ProctorioConfig::OAUTH_CONSUMER_KEY => self::TESTING_KEY,
                 ProctorioConfig::EXAM_START => 'https://proctorio.com/customers',
-                //'https://qa.eu.preprod.premium.taocloud.org/ltiDeliveryProvider/DeliveryTool/launch/eyJkZWxpdmVyeSI6Imh0dHBzOlwvXC9sdXRwcjAxb2F4LmV1LnByZW1pdW0udGFvY2xvdWQub3JnXC8jaTE1ODA0ODc3NzAyOTg5MjIzIn0=',
                 ProctorioConfig::EXAM_TAKE => 'https://proctorio.com/about',
-//                    'https://qa.eu.preprod.premium.taocloud.org/taoDelivery/DeliveryServer/runDeliveryExecution?deliveryExecution=kve_de_https%3A%2F%2Flutpr01oax.eu.premium.taocloud.org%2F%23i158453786611691892',
                 ProctorioConfig::EXAM_END => 'https://proctorio.com/platform',
-//                    'https://qa.eu.preprod.premium.taocloud.org/taoDelivery/DeliveryServer/index',
                 ProctorioConfig::EXAM_SETTINGS => 'webtraffic',
-                //'fullscreenmoderate,notabs',
                 ProctorioConfig::FULL_NAME => 'name withSpace',//there might be an issue with spaces inside the string
                 ProctorioConfig::EXAM_TAG => 'tag',
-                //'oatsa-testing-TAG',
                 ProctorioConfig::OAUTH_TIMESTAMP => $this->time,
                 ProctorioConfig::OAUTH_NONCE => 'mike123456nounce123',
             ];
