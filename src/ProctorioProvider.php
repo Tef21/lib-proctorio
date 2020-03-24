@@ -57,7 +57,7 @@ class ProctorioProvider
     public function retrieve(array $payload): string
     {
         $requestPayload = $this->providerConfig->configure($payload);
-        $signature = $this->createSignature($this->encoder, $this->normalizer, $this->requestPayload);
+        $signature = $this->createSignature($this->encoder, $this->normalizer, $requestPayload);
 
         //assign the signature
         $requestPayload['oauth_signature'] = $signature;
