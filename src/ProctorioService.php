@@ -22,17 +22,30 @@ namespace oat\Proctorio;
 
 class ProctorioService
 {
+    /** @var ProctorioProvider $provider */
     private $provider;
 
-    public function callProctorio()
-    {
-        $provider = new ProctorioProvider();
+    /** @var ProctorioConfig $config */
+    private $config;
 
-        return $provider->retrieve();
+    public function __construct()
+    {
+        $this->config = new ProctorioConfig();
+        $encoder = new Encoder;
+        $normalizer = new Normalizer();
+        $requestBuilder = new RequestBuilder();
+
+        $this->provider = new ProctorioProvider($this->config, $encoder, $normalizer, $requestBuilder);
     }
 
-    public function buildConfig()
-    {
 
+    public function callRemoteProctoring(array $config): string
+    {
+        return $this->provider->retrieve($config);
+    }
+
+    public function buildConfig(array $parameters): array
+    {
+        return $this->config->configure($parameters);
     }
 }

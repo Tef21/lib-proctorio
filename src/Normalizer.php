@@ -20,7 +20,6 @@
 
 namespace oat\Proctorio;
 
-
 class Normalizer
 {
     public function normalize(array $params): string

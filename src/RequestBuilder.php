@@ -29,7 +29,7 @@ class RequestBuilder
      */
     public $debug;
 
-    public function buildRequest($payload)
+    public function buildRequest($payload): string
     {
         // init the resource
         $ch = curl_init();
@@ -61,5 +61,4 @@ class RequestBuilder
 
         return $output;
     }
-
 }

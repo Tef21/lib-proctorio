@@ -20,7 +20,6 @@
 
 namespace oat\Proctorio;
 
-
 class SignatureBuilder
 {
     public const POST_MANHOOD = 'POST';

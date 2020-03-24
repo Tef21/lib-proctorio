@@ -1,7 +1,5 @@
 <?php
 
-namespace oat\Proctorio;
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,88 +17,53 @@ namespace oat\Proctorio;
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+namespace oat\Proctorio;
+
 class ProctorioProvider
 {
-
-    public const TESTING_KEY = 'bb795227c87748d09c4357f362a29ebf';
-
-    /**
-     * time()
-     * @var int
-     */
-    private $time;
-
+    /** @var ProctorioConfig $providerConfig */
     private $providerConfig;
+
+    /** @var Encoder $encoder */
+    private $encoder;
+
+    /** @var Normalizer $normalizer */
+    private $normalizer;
+
+    /** @var RequestBuilder $requestBuilder */
+    private $requestBuilder;
 
     /**
      * ProctorioProvider constructor.
      * @param ProctorioConfig $providerConfig
+     * @param Encoder $encoder
+     * @param Normalizer $normalizer
+     * @param RequestBuilder $requestBuilder
      */
-    public function __construct(ProctorioConfig $providerConfig)
+    public function __construct(ProctorioConfig $providerConfig, Encoder $encoder, Normalizer $normalizer, RequestBuilder $requestBuilder)
     {
         $this->providerConfig = $providerConfig;
+        $this->encoder = $encoder;
+        $this->normalizer = $normalizer;
+        $this->requestBuilder = $requestBuilder;
     }
 
-    public function retrieve()
+
+    /**
+     * @param array $payload
+     * @return string
+     */
+    public function retrieve(array $payload): string
     {
-        $config = $this->getProctorioConfig();
-        $encoder = $this->getEncoder();
-        $normalizer = $this->getNormilizer();
-        $requestBuilder = $this->getRequestBuilder();
+        $requestPayload = $this->providerConfig->configure($payload);
+        $signature = $this->createSignature($this->encoder, $this->normalizer, $this->requestPayload);
 
-        $payload = $this->buildPayload();
-
-        $requestPayload = $this->providerConfig();
-            //$config->configure($payload);
-
-        $signature = $this->createSignature($encoder, $normalizer, $requestPayload);
-
+        //assign the signature
         $requestPayload['oauth_signature'] = $signature;
+        $requestPayloadString = $this->normalizer->normalize($requestPayload);
 
-        $requestPayloadString = $normalizer->normalize($requestPayload);
-
-
-        return $requestBuilder->buildRequest($requestPayloadString);
-    }
-
-    private function buildPayload(): array
-    {
-        $this->time = time();
-
-        return
-            [
-                ProctorioConfig::LAUNCH_URL => ProctorioConfig::PROCTORIO_URL,
-                ProctorioConfig::USER_ID => 'mike123456',
-                ProctorioConfig::OAUTH_CONSUMER_KEY => self::TESTING_KEY,
-                ProctorioConfig::EXAM_START => 'https://proctorio.com/customers',
-                ProctorioConfig::EXAM_TAKE => 'https://proctorio.com/about',
-                ProctorioConfig::EXAM_END => 'https://proctorio.com/platform',
-                ProctorioConfig::EXAM_SETTINGS => 'webtraffic',
-                ProctorioConfig::FULL_NAME => 'name withSpace',//there might be an issue with spaces inside the string
-                ProctorioConfig::EXAM_TAG => 'tag',
-                ProctorioConfig::OAUTH_TIMESTAMP => $this->time,
-                ProctorioConfig::OAUTH_NONCE => 'mike123456nounce123',
-            ];
-    }
-
-    private function getRequestBuilder(): RequestBuilder
-    {
-        return new RequestBuilder();
-    }
-
-    private function getProctorioConfig(): ProctorioConfig
-    {
-        return new ProctorioConfig();
-    }
-
-    private function getEncoder(): Encoder
-    {
-        return new Encoder();
-    }
-
-    private function getNormilizer(): Normalizer
-    {
-        return new Normalizer();
+        return $this->requestBuilder->buildRequest($requestPayloadString);
     }
 
     /**
