@@ -24,17 +24,12 @@ use Ramsey\Uuid\Uuid;
 
 class ProctorioConfig
 {
-
+    public const PROCTORIO_URL = 'https://%s' . '15499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8';
     // https://{account region}5499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8
-    public const PROCTORIO_URL = 'https://us15499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8';
-//    public const PROCTORIO_URL = 'https://{areaofexams}15499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8';
-//    public const PROCTORIO_URL = 'https://premium.docker.localhost/proctorio/test.php';
-
     //HTTPS must be used when generating the URLs
     //Only TLS 1.2 and 1.3 are supported.
     //The signature base string is used to generate the request signing key.
     // Proctorio uses percent encoding based strictly on RFC3986.
-    //mandatory
 
     public const LAUNCH_URL = 'launch_url';
     //max length = 500

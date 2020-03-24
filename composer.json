@@ -5,13 +5,19 @@
     "forum": "http://forum.taotesting.com",
     "issues": "http://forge.taotesting.com"
   },
-  "keywords" : ["OAT", "TAO","Proctorio"],
-  "homepage" : "http://www.taotesting.com",
-  "license" : [
+  "keywords": [
+    "OAT",
+    "TAO",
+    "Proctorio"
+  ],
+  "homepage": "http://www.taotesting.com",
+  "license": [
     "GPL-2.0-only"
   ],
-  "require" : {
-    "php" : ">=7.2.10"
+  "require": {
+    "php": ">=7.2.10",
+    "ext-curl": "*",
+    "ramsey/uuid": "^3.8"
   },
   "autoload": {
     "psr-4": {
