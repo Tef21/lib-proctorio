@@ -22,6 +22,7 @@ namespace oat\Proctorio;
 
 class RequestBuilder
 {
+    const CURRENT_DEFAULT_REGION = 'us';
 
     /**
      * allows us to see the curl_getinfo
@@ -35,7 +36,7 @@ class RequestBuilder
         $ch = curl_init();
 
         curl_setopt_array($ch, [
-            CURLOPT_URL => ProctorioConfig::PROCTORIO_URL,
+            CURLOPT_URL => sprintf(ProctorioConfig::PROCTORIO_URL, self::CURRENT_DEFAULT_REGION),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => $payload, //bla=bla&bla2=ba
