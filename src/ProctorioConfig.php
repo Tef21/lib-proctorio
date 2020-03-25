@@ -117,7 +117,7 @@ class ProctorioConfig
         return $parameters[$field] ?? $default;
     }
 
-    public static function getProctorioDefaultUrl()
+    public static function getProctorioDefaultUrl(): string
     {
         return sprintf(ProctorioConfig::PROCTORIO_URL, ProctorioConfig::CURRENT_DEFAULT_REGION);
     }

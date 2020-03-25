@@ -35,7 +35,7 @@ class ProctorioService
         $normalizer = new Normalizer();
         $requestBuilder = new RequestBuilder();
 
-        $this->provider = new ProctorioProvider($this->config, $encoder, $normalizer, $requestBuilder);
+        $this->provider = new ProctorioProvider($encoder, $normalizer, $requestBuilder);
     }
 
 

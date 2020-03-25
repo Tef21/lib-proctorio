@@ -36,14 +36,12 @@ class ProctorioProvider
 
     /**
      * ProctorioProvider constructor.
-     * @param ProctorioConfig $providerConfig
      * @param Encoder $encoder
      * @param Normalizer $normalizer
      * @param RequestBuilder $requestBuilder
      */
-    public function __construct(ProctorioConfig $providerConfig, Encoder $encoder, Normalizer $normalizer, RequestBuilder $requestBuilder)
+    public function __construct(Encoder $encoder, Normalizer $normalizer, RequestBuilder $requestBuilder)
     {
-        $this->providerConfig = $providerConfig;
         $this->encoder = $encoder;
         $this->normalizer = $normalizer;
         $this->requestBuilder = $requestBuilder;
@@ -56,11 +54,8 @@ class ProctorioProvider
      */
     public function retrieve(array $payload): string
     {
-        $requestPayload = $this->providerConfig->configure($payload);
-        $signature = $this->createSignature($this->encoder, $this->normalizer, $requestPayload);
-
-        //assign the signature
-        $requestPayload['oauth_signature'] = $signature;
+        $requestPayload = $payload;
+        $requestPayload['oauth_signature'] = $this->createSignature($this->encoder, $this->normalizer, $requestPayload);
         $requestPayloadString = $this->normalizer->normalize($requestPayload);
 
         return $this->requestBuilder->buildRequest($requestPayloadString);

@@ -24,6 +24,14 @@ class Normalizer
 {
     public function normalize(array $params): string
     {
-        return http_build_query($params, null, '&', PHP_QUERY_RFC3986);
+        $result = [];
+        foreach ($params as $key => $value) {
+            $result[] =
+                rawurlencode(urldecode($key))
+                . '='
+                . rawurlencode(urldecode($value));
+        }
+
+        return implode('&', $result);
     }
 }
