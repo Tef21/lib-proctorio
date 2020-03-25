@@ -56,7 +56,7 @@ class ProctorioProvider
     {
         $requestPayload = $payload;
         $requestPayload['oauth_signature'] = $this->createSignature($this->encoder, $this->normalizer, $requestPayload);
-        $requestPayloadString = $this->normalizer->normalize($requestPayload);
+        $requestPayloadString = http_build_query($requestPayload);
 
         return $this->requestBuilder->buildRequest($requestPayloadString);
     }
