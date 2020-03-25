@@ -106,7 +106,7 @@ class ProctorioConfig
             self::OAUTH_SIGNATURE_METHOD => $this->getDefaultValue($parameters, self::OAUTH_SIGNATURE_METHOD, self::HMAC_SHA_1),
             self::OAUTH_VERSION => $this->getDefaultValue($parameters, self::OAUTH_VERSION, self::DEFAULT_OAUTH_VERSION),
             self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP, time()),
-            self::OAUTH_NONCE => $this->getDefaultValue($parameters, self::OAUTH_NONCE, Uuid::uuid4()),
+            self::OAUTH_NONCE => $this->getDefaultValue($parameters, self::OAUTH_NONCE, (string)Uuid::uuid4()),
         ];
     }
 
