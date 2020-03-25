@@ -31,6 +31,8 @@ class ProctorioConfig
     //The signature base string is used to generate the request signing key.
     // Proctorio uses percent encoding based strictly on RFC3986.
 
+    public const CURRENT_DEFAULT_REGION = 'us';
+
     public const LAUNCH_URL = 'launch_url';
     //max length = 500
     //mandatory
@@ -93,7 +95,7 @@ class ProctorioConfig
     public function configure(array $parameters): array
     {
         return [
-            self::LAUNCH_URL => $this->getDefaultValue($parameters, self::LAUNCH_URL, self::PROCTORIO_URL),
+            self::LAUNCH_URL => $this->getDefaultValue($parameters, self::LAUNCH_URL, self::getProctorioDefaultUrl()),
             self::USER_ID => $this->getDefaultValue($parameters, self::USER_ID),
             self::OAUTH_CONSUMER_KEY => $this->getDefaultValue($parameters, self::OAUTH_CONSUMER_KEY),
             self::EXAM_START => $this->getDefaultValue($parameters, self::EXAM_START),
@@ -105,13 +107,18 @@ class ProctorioConfig
 
             self::OAUTH_SIGNATURE_METHOD => $this->getDefaultValue($parameters, self::OAUTH_SIGNATURE_METHOD, self::HMAC_SHA_1),
             self::OAUTH_VERSION => $this->getDefaultValue($parameters, self::OAUTH_VERSION, self::DEFAULT_OAUTH_VERSION),
-            self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP, time()),
-            self::OAUTH_NONCE => $this->getDefaultValue($parameters, self::OAUTH_NONCE, (string)Uuid::uuid4()),
+            self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP),
+            self::OAUTH_NONCE => $this->getDefaultValue($parameters, self::OAUTH_NONCE),
         ];
     }
 
     private function getDefaultValue(array $parameters, $field, $default = '')
     {
         return $parameters[$field] ?? $default;
+    }
+
+    public static function getProctorioDefaultUrl()
+    {
+        return sprintf(ProctorioConfig::PROCTORIO_URL, ProctorioConfig::CURRENT_DEFAULT_REGION);
     }
 }

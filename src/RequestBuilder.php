@@ -22,13 +22,17 @@ namespace oat\Proctorio;
 
 class RequestBuilder
 {
-    const CURRENT_DEFAULT_REGION = 'us';
+    /** @var string $url */
+    private $url;
 
     /**
-     * allows us to see the curl_getinfo
-     * @var bool
+     * RequestBuilder constructor.
+     * @param string $url
      */
-    public $debug;
+    public function __construct(string $url = null)
+    {
+        $this->url = $url;
+    }
 
     public function buildRequest($payload): string
     {
@@ -36,10 +40,10 @@ class RequestBuilder
         $ch = curl_init();
 
         curl_setopt_array($ch, [
-            CURLOPT_URL => sprintf(ProctorioConfig::PROCTORIO_URL, self::CURRENT_DEFAULT_REGION),
+            CURLOPT_URL => $this->getUrl(),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $payload, //bla=bla&bla2=ba
+            CURLOPT_POSTFIELDS => $payload,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
             CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded'],
@@ -48,18 +52,20 @@ class RequestBuilder
         // execute
         $output = curl_exec($ch);
 
-
         if (curl_errno($ch)) {
             var_dump(curl_error($ch));
         }
 
-        // free
         curl_close($ch);
 
-        if ($this->debug) {
-            curl_getinfo($ch);
-        }
-
         return $output;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url ?? ProctorioConfig::getProctorioDefaultUrl();
     }
 }
