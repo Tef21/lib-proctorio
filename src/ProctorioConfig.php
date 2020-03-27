@@ -91,6 +91,7 @@ class ProctorioConfig
 
     //default value for OAUTH_VERSION
 
+    public const POST_MANHOOD = 'POST';
 
     public function configure(array $parameters): array
     {

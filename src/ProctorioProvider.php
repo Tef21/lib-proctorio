@@ -50,12 +50,13 @@ class ProctorioProvider
 
     /**
      * @param array $payload
+     * @param string $secret
      * @return string
      */
-    public function retrieve(array $payload): string
+    public function retrieve(array $payload, string $secret): string
     {
         $requestPayload = $payload;
-        $requestPayload['oauth_signature'] = $this->createSignature($this->encoder, $this->normalizer, $requestPayload);
+        $requestPayload['oauth_signature'] = $this->createSignature($this->encoder, $this->normalizer, $requestPayload, $secret);
         $requestPayloadString = http_build_query($requestPayload);
 
         return $this->requestBuilder->buildRequest($requestPayloadString);
@@ -65,11 +66,11 @@ class ProctorioProvider
      * @param Encoder $encoder
      * @param Normalizer $normalizer
      * @param array $payload
-     * @return string
+     * @param string $secret
      * @return string
      */
-    private function createSignature(Encoder $encoder, Normalizer $normalizer, array $payload): string
+    private function createSignature(Encoder $encoder, Normalizer $normalizer, array $payload, string $secret): string
     {
-        return (new SignatureBuilder())->buildSignature($encoder, $normalizer, $payload);
+        return (new SignatureBuilder())->buildSignature($encoder, $normalizer, $payload, $secret);
     }
 }

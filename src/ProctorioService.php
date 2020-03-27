@@ -39,9 +39,9 @@ class ProctorioService
     }
 
 
-    public function callRemoteProctoring(array $config): string
+    public function callRemoteProctoring(array $config, string $secret): string
     {
-        return $this->provider->retrieve($config);
+        return $this->provider->retrieve($config, $secret);
     }
 
     public function buildConfig(array $parameters): array
