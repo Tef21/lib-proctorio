@@ -10,6 +10,12 @@
 Long description of `oat-sa/lib-proctorio`
 [Proctorio](https://proctorio.com/)
 
+Using state-of-the-art technology and end-to-end data security, 
+Proctorio ensures the total learning integrity of every assessment, every time. 
+Our software eliminates human error, bias, and much of the expense associated with remote proctoring and identity verification.
+
+Proctorio also integrates effortlessly with whatever learning management system you already use— no scheduling, waiting or additional logins required— for instant, objective, secure results.
+
 ## Installation instructions
 
 These instructions assume that you have already a TAO installation on your system. If you don't, go to
