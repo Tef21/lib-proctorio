@@ -1,0 +1,34 @@
+# lib-proctorio
+
+![TAO Logo](https://github.com/oat-sa/taohub-developer-guide/raw/master/resources/tao-logo.png)
+
+
+
+> Short description of `oat-sa/lib-proctorio`
+>Proctorio ensures the total learning integrity of every assessment, every time
+
+Long description of `oat-sa/lib-proctorio`
+[Proctorio](https://proctorio.com/)
+
+## Installation instructions
+
+These instructions assume that you have already a TAO installation on your system. If you don't, go to
+[package/tao](https://github.com/oat-sa/package-tao) and follow the installation instructions over there.
+
+Add the library to your TAO composer and to the autoloader:
+
+Note that `oat-sa/lib-proctorio` is not registered on [Packagist](https://packagist.org/) so that you will need to add
+a reference to your _composer.json_ before you can use `composer require`.
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "git@github.com:oat-sa/lib-proctorio.git"
+    }
+],
+```
+Now you can add it to `composer.json`:
+```bash
+composer require oat-sa/lib-proctorio
+```
+## Library Wiki
