@@ -4,13 +4,13 @@
 
 
 
-> Short description of `oat-sa/lib-proctorio`
+
+## Description
+[Proctorio](https://proctorio.com/)
+
 
 Proctorio library allows us to create a signed request to the Proctorio provider
 
->Long description of `oat-sa/lib-proctorio`
-
-[Proctorio](https://proctorio.com/)
 
 Using state-of-the-art technology and end-to-end data security, 
 Proctorio ensures the total learning integrity of every assessment, every time. 
