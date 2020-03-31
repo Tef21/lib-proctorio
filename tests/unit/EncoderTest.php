@@ -28,7 +28,7 @@ class EncoderTest extends TestCase
     /** @var Encoder */
     private $subject;
 
-    public function getUrlSources()
+    public function getUrlSources(): array
     {
         return [
             [
@@ -50,11 +50,9 @@ class EncoderTest extends TestCase
     /**
      * @dataProvider getUrlSources
      */
-    public function testEncode($stringToEncode, $expected)
+    public function testEncode(string $stringToEncode, string $expected): void
     {
         $result = $this->subject->encode($stringToEncode);
         $this->assertEquals($expected, $result);
     }
-
-
 }
