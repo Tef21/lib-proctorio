@@ -65,6 +65,10 @@ class ProctorioConfig
     // max length = 100
 
     public const EXAM_TAG = 'exam_tag';
+    //This is the exam ID tag and will be added  to the end of the launch and review URLs. 
+    // When provided, it prevents it from being 
+    // manipulated by the user as it is more  secure. If it is sent,
+    // then Proctorio factors  it into the response
     // max length = 100
 
     public const OAUTH_SIGNATURE_METHOD = 'oauth_signature_method';
@@ -105,7 +109,6 @@ class ProctorioConfig
             self::EXAM_SETTINGS => $this->getDefaultValue($parameters, self::EXAM_SETTINGS),
             self::FULL_NAME => $this->getDefaultValue($parameters, self::FULL_NAME),
             self::EXAM_TAG => $this->getDefaultValue($parameters, self::EXAM_TAG),
-
             self::OAUTH_SIGNATURE_METHOD => $this->getDefaultValue($parameters, self::OAUTH_SIGNATURE_METHOD, self::HMAC_SHA_1),
             self::OAUTH_VERSION => $this->getDefaultValue($parameters, self::OAUTH_VERSION, self::DEFAULT_OAUTH_VERSION),
             self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP),
@@ -113,7 +116,7 @@ class ProctorioConfig
         ];
     }
 
-    private function getDefaultValue(array $parameters, $field, $default = '')
+    private function getDefaultValue(array $parameters, string $field, string $default = ''): string
     {
         return $parameters[$field] ?? $default;
     }
