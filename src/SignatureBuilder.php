@@ -20,27 +20,18 @@
 
 namespace oat\Proctorio;
 
-
 class SignatureBuilder
 {
-    public const POST_MANHOOD = 'POST';
-    public const SECRET = 'ebabaef70e234f33a346dbc5f4547283';
-
-    public function buildSignature(
-        Encoder $encoder,
-        Normalizer $normalizer,
-        array $payload
-    ): string
+    public function buildSignature(Encoder $encoder, Normalizer $normalizer, array $payload, string $secret): string
     {
         $signatureBaseString =
-            self::POST_MANHOOD
+            ProctorioConfig::POST_MANHOOD
             . '&'
-            . $encoder->encode(ProctorioConfig::PROCTORIO_URL)
+            . $encoder->encode(ProctorioConfig::getProctorioDefaultUrl())
             . '&'
             . $encoder->encode($normalizer->normalize($payload));
 
-        $computedSignature = hash_hmac('sha1', $signatureBaseString, self::SECRET, true);
+        $computedSignature = hash_hmac('sha1', $signatureBaseString, $secret, true);
         return base64_encode($computedSignature);
     }
-
 }
