@@ -25,76 +25,22 @@ use Ramsey\Uuid\Uuid;
 class ProctorioConfig
 {
     public const PROCTORIO_URL = 'https://%s' . '15499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8';
-    // https://{account region}5499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8
-    //HTTPS must be used when generating the URLs
-    //Only TLS 1.2 and 1.3 are supported.
-    //The signature base string is used to generate the request signing key.
-    // Proctorio uses percent encoding based strictly on RFC3986.
-
     public const CURRENT_DEFAULT_REGION = 'us';
-
     public const LAUNCH_URL = 'launch_url';
-    //max length = 500
-    //mandatory
-
     public const USER_ID = 'user_id';
-    //alphanumeric (hyphens    //also acceptable)
-    //max length = 36
-    //mandatory
-
     public const OAUTH_CONSUMER_KEY = 'oauth_consumer_key';
-    // max length = 32
-    //mandatory
-
     public const EXAM_START = 'exam_start';
-    // max length = 500
-    //mandatory
-
     public const EXAM_TAKE = 'exam_take';
-    // max length = 1000
-    //mandatory
-
     public const EXAM_END = 'exam_end';
-    // max length = 500
-    //mandatory
-
     public const EXAM_SETTINGS = 'exam_settings';
-    //mandatory
-
     public const FULL_NAME = 'fullname';
-    // max length = 100
-
     public const EXAM_TAG = 'exam_tag';
-    //This is the exam ID tag and will be added  to the end of the launch and review URLs. 
-    // When provided, it prevents it from being 
-    // manipulated by the user as it is more  secure. If it is sent,
-    // then Proctorio factors  it into the response
-    // max length = 100
-
     public const OAUTH_SIGNATURE_METHOD = 'oauth_signature_method';
-    // HMAC-SHA1
-    // mandatory
-
     public const OAUTH_VERSION = 'oauth_version';
-    // 1.0 
-    // mandatory
-
     public const OAUTH_TIMESTAMP = 'oauth_timestamp';
-    //Epoch timestamp. Used to prevent  delayed attacks.
-    // Must be within 8 minutes  of the correct time, otherwise, it is  rejected. 
-    //mandatory
-
     public const OAUTH_NONCE = 'oauth_nonce';
-    // Anything unique. Used to prevent replay  attacks 
-    // mandatory
-
     public const HMAC_SHA_1 = 'HMAC-SHA1';
-    //default value for OAUTH_SIGNATURE_METHOD
-
     public const DEFAULT_OAUTH_VERSION = '1.0';
-
-    //default value for OAUTH_VERSION
-
     public const POST_MANHOOD = 'POST';
 
     public function configure(array $parameters): array
