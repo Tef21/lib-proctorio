@@ -27,8 +27,7 @@ class Normalizer
     {
         $result = [];
         foreach ($params as $key => $value) {
-            $result[] =
-                rawurlencode(urldecode($key))
+            $result[] = rawurlencode(urldecode($key))
                 . '='
                 . rawurlencode(urldecode($value));
         }
