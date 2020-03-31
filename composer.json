@@ -28,7 +28,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "oat\\Proctorio\\tests": "tests/"
+      "oat\\Proctorio\\tests": "tests"
     }
   }
 }
