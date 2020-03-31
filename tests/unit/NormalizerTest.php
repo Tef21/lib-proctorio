@@ -20,9 +20,7 @@
 
 namespace oat\Proctorio\tests\unit;
 
-use oat\Proctorio\Encoder;
 use oat\Proctorio\Normalizer;
-use oat\Proctorio\ProctorioConfig;
 use PHPUnit\Framework\TestCase;
 
 class NormalizerTest extends TestCase
@@ -31,7 +29,7 @@ class NormalizerTest extends TestCase
     /** @var Normalizer */
     private $subject;
 
-    public function getResolvedParameters()
+    public function getResolvedParameters(): array
     {
         return [
             [

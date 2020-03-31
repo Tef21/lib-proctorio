@@ -69,6 +69,6 @@ class ProctorioConfig
 
     public static function getProctorioDefaultUrl(): string
     {
-        return sprintf(ProctorioConfig::PROCTORIO_URL, ProctorioConfig::CURRENT_DEFAULT_REGION);
+        return sprintf(self::PROCTORIO_URL, self::CURRENT_DEFAULT_REGION);
     }
 }
