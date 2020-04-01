@@ -22,14 +22,27 @@ namespace oat\Proctorio;
 
 class SignatureBuilder
 {
-    public function buildSignature(Encoder $encoder, Normalizer $normalizer, array $payload, string $secret): string
+    /** @var Encoder */
+    private $encoder;
+
+    /** @var Normalizer */
+    private $normalizer;
+
+    public function __construct(Encoder $encoder, Normalizer $normalizer)
+    {
+        $this->encoder = $encoder;
+        $this->normalizer = $normalizer;
+    }
+
+
+    public function buildSignature(array $payload, string $secret): string
     {
         $signatureBaseString =
             ProctorioConfig::POST_MANHOOD
             . '&'
-            . $encoder->encode(ProctorioConfig::getProctorioDefaultUrl())
+            . $this->encoder->encode(ProctorioConfig::getProctorioDefaultUrl())
             . '&'
-            . $encoder->encode($normalizer->normalize($payload));
+            . $this->encoder->encode($this->normalizer->normalize($payload));
 
         $computedSignature = hash_hmac('sha1', $signatureBaseString, $secret, true);
         return base64_encode($computedSignature);

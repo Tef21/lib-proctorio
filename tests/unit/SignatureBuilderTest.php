@@ -39,15 +39,17 @@ class SignatureBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->subject = new SignatureBuilder();
         $this->encoderMock = $this->createMock(Encoder::class);
         $this->normalizerMock = $this->createMock(Normalizer::class);
+        $this->encoderMock = $this->createMock(Encoder::class);
+        $this->normalizerMock = $this->createMock(Normalizer::class);
+        $this->subject = new SignatureBuilder($this->encoderMock, $this->normalizerMock);
     }
 
     public function testBuildSignature(): void
     {
         $this->encoderMock->method('encode')->willReturn('key=value');
-        $result = $this->subject->buildSignature($this->encoderMock, $this->normalizerMock, ['payload'], 'secret');
+        $result = $this->subject->buildSignature(['payload'], 'secret');
 
         $this->assertEquals('B8HpmpY7D3isaP19rbwPchlVkNk=', $result);
     }
