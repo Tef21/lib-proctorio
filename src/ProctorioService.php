@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * This program is free software; you can redistribute it and/or
@@ -20,6 +20,8 @@
 
 namespace oat\Proctorio;
 
+use GuzzleHttp\Exception\GuzzleException;
+
 class ProctorioService
 {
     /** @var ProctorioProvider $provider */
@@ -28,17 +30,15 @@ class ProctorioService
     /** @var ProctorioConfig $config */
     private $config;
 
-    public function __construct()
+    public function __construct(ProctorioProvider $proctorioProvider, ProctorioConfig $proctorioConfig)
     {
-        $this->config = new ProctorioConfig();
-        $encoder = new Encoder;
-        $normalizer = new Normalizer();
-        $requestBuilder = new RequestBuilder();
-
-        $this->provider = new ProctorioProvider($encoder, $normalizer, $requestBuilder);
+        $this->provider = $proctorioProvider;
+        $this->config = $proctorioConfig;
     }
 
-
+    /**
+     * @throws GuzzleException
+     */
     public function callRemoteProctoring(array $config, string $secret): string
     {
         return $this->provider->retrieve($config, $secret);
