@@ -20,57 +20,38 @@
 
 namespace oat\Proctorio;
 
+use GuzzleHttp\Exception\GuzzleException;
+
 class ProctorioProvider
 {
-    /** @var ProctorioConfig $providerConfig */
-    private $providerConfig;
+    /** @var ProctorioRequestHandler $requestHandler */
+    private $requestHandler;
 
-    /** @var Encoder $encoder */
-    private $encoder;
-
-    /** @var Normalizer $normalizer */
-    private $normalizer;
-
-    /** @var RequestBuilder $requestBuilder */
-    private $requestBuilder;
+    /** @var SignatureBuilder */
+    private $signatureBuilder;
 
     /**
      * ProctorioProvider constructor.
-     * @param Encoder $encoder
-     * @param Normalizer $normalizer
-     * @param RequestBuilder $requestBuilder
+     *
      */
-    public function __construct(Encoder $encoder, Normalizer $normalizer, RequestBuilder $requestBuilder)
+    public function __construct(ProctorioRequestHandler $requestHandler, SignatureBuilder $signatureBuilder)
     {
-        $this->encoder = $encoder;
-        $this->normalizer = $normalizer;
-        $this->requestBuilder = $requestBuilder;
+        $this->requestHandler = $requestHandler;
+        $this->signatureBuilder = $signatureBuilder;
     }
 
 
     /**
-     * @param array $payload
-     * @param string $secret
-     * @return string
+     * @throws GuzzleException
      */
     public function retrieve(array $payload, string $secret): string
     {
         $requestPayload = $payload;
-        $requestPayload['oauth_signature'] = $this->createSignature($this->encoder, $this->normalizer, $requestPayload, $secret);
+        $requestPayload['oauth_signature'] = $this->signatureBuilder->buildSignature($payload, $secret);
         $requestPayloadString = http_build_query($requestPayload);
 
-        return $this->requestBuilder->buildRequest($requestPayloadString);
-    }
+        $response = $this->requestHandler->execute($requestPayloadString);
 
-    /**
-     * @param Encoder $encoder
-     * @param Normalizer $normalizer
-     * @param array $payload
-     * @param string $secret
-     * @return string
-     */
-    private function createSignature(Encoder $encoder, Normalizer $normalizer, array $payload, string $secret): string
-    {
-        return (new SignatureBuilder())->buildSignature($encoder, $normalizer, $payload, $secret);
+        return $response->getBody();
     }
 }
