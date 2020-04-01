@@ -20,40 +20,42 @@
 
 namespace oat\Proctorio;
 
-use oat\Proctorio\Exception\CurlExecutionException;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\ResponseInterface;
 
-class RequestBuilder
+class ProctorioRequestHandler
 {
     /** @var string $url */
     private $url;
 
-    /** @var false|resource */
-    private $ch;
+    /** @var ClientInterface */
+    private $httpClient;
 
     /**
      * RequestBuilder constructor.
-     *
-     * @param string $url
      */
-    public function __construct(string $url = null)
+    public function __construct(ClientInterface $httpClient, string $url = null)
     {
         $this->url = $url;
-        $this->ch = curl_init();
+        $this->httpClient = $httpClient;
     }
 
-    public function buildRequest($payload): bool
+    /**
+     * @throws GuzzleException
+     */
+    public function execute(string $payload): ResponseInterface
     {
-        return curl_setopt_array($this->ch, [
-            CURLOPT_URL => $this->getUrl(),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $payload,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-            CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded'],
-        ]);
-    }
+        $request = new Request(
+            'POST',
+            $this->getUrl(),
+            [],
+            $payload
+        );
 
+        return $this->httpClient->send($request);
+    }
 
     /**
      * @return string
@@ -61,25 +63,5 @@ class RequestBuilder
     public function getUrl(): string
     {
         return $this->url ?? ProctorioConfig::getProctorioDefaultUrl();
-    }
-
-    /**
-     * @return bool|resource
-     * @throws CurlExecutionException
-     */
-    public function execute()
-    {
-        if (!$this->ch) {
-            throw new CurlExecutionException('You have to build request first');
-        }
-        $result = curl_exec($this->ch);
-
-        if (curl_errno($this->ch)) {
-            throw new CurlExecutionException(curl_error($this->ch));
-        }
-
-        curl_close($this->ch);
-
-        return $result;
     }
 }
