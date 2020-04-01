@@ -20,26 +20,30 @@
 
 namespace oat\Proctorio;
 
+use oat\Proctorio\Exception\CurlExecutionException;
+
 class RequestBuilder
 {
     /** @var string $url */
     private $url;
 
+    /** @var false|resource */
+    private $ch;
+
     /**
      * RequestBuilder constructor.
+     *
      * @param string $url
      */
     public function __construct(string $url = null)
     {
         $this->url = $url;
+        $this->ch = curl_init();
     }
 
-    public function buildRequest($payload): string
+    public function buildRequest($payload): bool
     {
-        // init the resource
-        $ch = curl_init();
-
-        curl_setopt_array($ch, [
+        return curl_setopt_array($this->ch, [
             CURLOPT_URL => $this->getUrl(),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
@@ -48,18 +52,8 @@ class RequestBuilder
             CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
             CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded'],
         ]);
-
-        // execute
-        $output = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            var_dump(curl_error($ch));
-        }
-
-        curl_close($ch);
-
-        return $output;
     }
+
 
     /**
      * @return string
@@ -67,5 +61,25 @@ class RequestBuilder
     public function getUrl(): string
     {
         return $this->url ?? ProctorioConfig::getProctorioDefaultUrl();
+    }
+
+    /**
+     * @return bool|resource
+     * @throws CurlExecutionException
+     */
+    public function execute()
+    {
+        if (!$this->ch) {
+            throw new CurlExecutionException('You have to build request first');
+        }
+        $result = curl_exec($this->ch);
+
+        if (curl_errno($this->ch)) {
+            throw new CurlExecutionException(curl_error($this->ch));
+        }
+
+        curl_close($this->ch);
+
+        return $result;
     }
 }
