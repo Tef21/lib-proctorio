@@ -27,7 +27,7 @@ Add the library to your TAO composer and to the autoloader:
 
 Note that `oat-sa/lib-proctorio` is not registered on [Packagist](https://packagist.org/) so that you will need to add
 a reference to your _composer.json_ before you can use `composer require`.
-```json
+```
 "repositories": [
     {
         "type": "vcs",

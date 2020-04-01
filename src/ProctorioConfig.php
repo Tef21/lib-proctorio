@@ -1,0 +1,74 @@
+<?php declare(strict_types=1);
+
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ */
+
+namespace oat\Proctorio;
+
+use Ramsey\Uuid\Uuid;
+
+class ProctorioConfig
+{
+    public const PROCTORIO_URL = 'https://%s' . '15499ws.proctor.io/6521ca945bd84cfc85d2767da06aa7c8';
+    public const CURRENT_DEFAULT_REGION = 'us';
+    public const LAUNCH_URL = 'launch_url';
+    public const USER_ID = 'user_id';
+    public const OAUTH_CONSUMER_KEY = 'oauth_consumer_key';
+    public const EXAM_START = 'exam_start';
+    public const EXAM_TAKE = 'exam_take';
+    public const EXAM_END = 'exam_end';
+    public const EXAM_SETTINGS = 'exam_settings';
+    public const FULL_NAME = 'fullname';
+    public const EXAM_TAG = 'exam_tag';
+    public const OAUTH_SIGNATURE_METHOD = 'oauth_signature_method';
+    public const OAUTH_VERSION = 'oauth_version';
+    public const OAUTH_TIMESTAMP = 'oauth_timestamp';
+    public const OAUTH_NONCE = 'oauth_nonce';
+    public const HMAC_SHA_1 = 'HMAC-SHA1';
+    public const DEFAULT_OAUTH_VERSION = '1.0';
+    public const POST_MANHOOD = 'POST';
+
+    public function configure(array $parameters): array
+    {
+        return [
+            self::LAUNCH_URL => $this->getDefaultValue($parameters, self::LAUNCH_URL, self::getProctorioDefaultUrl()),
+            self::USER_ID => $this->getDefaultValue($parameters, self::USER_ID),
+            self::OAUTH_CONSUMER_KEY => $this->getDefaultValue($parameters, self::OAUTH_CONSUMER_KEY),
+            self::EXAM_START => $this->getDefaultValue($parameters, self::EXAM_START),
+            self::EXAM_TAKE => $this->getDefaultValue($parameters, self::EXAM_TAKE),
+            self::EXAM_END => $this->getDefaultValue($parameters, self::EXAM_END),
+            self::EXAM_SETTINGS => $this->getDefaultValue($parameters, self::EXAM_SETTINGS),
+            self::FULL_NAME => $this->getDefaultValue($parameters, self::FULL_NAME),
+            self::EXAM_TAG => $this->getDefaultValue($parameters, self::EXAM_TAG),
+            self::OAUTH_SIGNATURE_METHOD => $this->getDefaultValue($parameters, self::OAUTH_SIGNATURE_METHOD, self::HMAC_SHA_1),
+            self::OAUTH_VERSION => $this->getDefaultValue($parameters, self::OAUTH_VERSION, self::DEFAULT_OAUTH_VERSION),
+            self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP),
+            self::OAUTH_NONCE => $this->getDefaultValue($parameters, self::OAUTH_NONCE),
+        ];
+    }
+
+    private function getDefaultValue(array $parameters, string $field, string $default = ''): string
+    {
+        return $parameters[$field] ?? $default;
+    }
+
+    public static function getProctorioDefaultUrl(): string
+    {
+        return sprintf(self::PROCTORIO_URL, self::CURRENT_DEFAULT_REGION);
+    }
+}
