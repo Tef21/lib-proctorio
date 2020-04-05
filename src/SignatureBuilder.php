@@ -32,6 +32,13 @@ class SignatureBuilder
     {
         $this->encoder = $encoder;
         $this->normalizer = $normalizer;
+
+        if ($this->encoder === null) {
+            $this->encoder = new Encoder();
+        }
+        if ($this->normalizer === null) {
+            $this->normalizer = new Normalizer();
+        }
     }
 
 

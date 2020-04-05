@@ -28,7 +28,7 @@
 namespace oat\Proctorio\tests\unit;
 
 use oat\Proctorio\ProctorioConfig;
-use oat\Proctorio\ProctorioProvider;
+use oat\Proctorio\ProctorioAccessProvider;
 use oat\Proctorio\ProctorioService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -40,7 +40,7 @@ class ProctorioServiceTest extends TestCase
     private const PARAMS_EXAMPLE = ['paramKey' => 'paramValue']
     ;
 
-    /** @var ProctorioProvider|MockObject */
+    /** @var ProctorioAccessProvider|MockObject */
     private $proctorioProviderMock;
 
     /** @var ProctorioService */
@@ -52,7 +52,7 @@ class ProctorioServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->proctorioProviderMock = $this->createMock(ProctorioProvider::class);
+        $this->proctorioProviderMock = $this->createMock(ProctorioAccessProvider::class);
         $this->configMock = $this->createMock(ProctorioConfig::class);
         $this->subject = new ProctorioService(
             $this->proctorioProviderMock,

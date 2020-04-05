@@ -22,18 +22,25 @@ namespace oat\Proctorio;
 
 use GuzzleHttp\Exception\GuzzleException;
 
-class ProctorioService
+class ProctorioService implements RemoteProctoringInterface
 {
-    /** @var ProctorioProvider $provider */
+    /** @var ProctorioAccessProvider $provider */
     private $provider;
 
     /** @var ProctorioConfig $config */
     private $config;
 
-    public function __construct(ProctorioProvider $proctorioProvider, ProctorioConfig $proctorioConfig)
+    public function __construct(ProctorioAccessProvider $proctorioProvider, ProctorioConfig $proctorioConfig)
     {
         $this->provider = $proctorioProvider;
         $this->config = $proctorioConfig;
+
+        if ($this->provider === null) {
+            $this->provider = new ProctorioAccessProvider();
+        }
+        if ($this->config === null) {
+            $this->config = new ProctorioConfig();
+        }
     }
 
     /**

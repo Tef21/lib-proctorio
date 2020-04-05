@@ -27,7 +27,7 @@ use GuzzleHttp\Psr7\Response;
 use oat\Proctorio\Encoder;
 use oat\Proctorio\Normalizer;
 use oat\Proctorio\ProctorioConfig;
-use oat\Proctorio\ProctorioProvider;
+use oat\Proctorio\ProctorioAccessProvider;
 use oat\Proctorio\ProctorioRequestHandler;
 use oat\Proctorio\ProctorioService;
 use oat\Proctorio\SignatureBuilder;
@@ -47,7 +47,7 @@ class ProctorioServiceTest extends TestCase
     /** @var ProctorioRequestHandler */
     private $requestHandler;
 
-    /** @var ProctorioProvider */
+    /** @var ProctorioAccessProvider */
     private $provider;
 
     /** @var ProctorioConfig */
@@ -81,10 +81,9 @@ class ProctorioServiceTest extends TestCase
             $this->encoder,
             $this->normalizer
         );
-        $this->provider = new ProctorioProvider(
+        $this->provider = new ProctorioAccessProvider(
             $this->requestHandler,
-            $this->signatureBuilder,
-
+            $this->signatureBuilder
         );
         $this->config = new ProctorioConfig();
 

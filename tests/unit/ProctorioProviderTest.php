@@ -27,12 +27,13 @@
 
 namespace oat\Proctorio\tests\unit;
 
-use oat\Proctorio\ProctorioProvider;
+use oat\Proctorio\ProctorioAccessProvider;
 use oat\Proctorio\ProctorioRequestHandler;
 use oat\Proctorio\SignatureBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 class ProctorioProviderTest extends TestCase
 {
@@ -49,7 +50,7 @@ class ProctorioProviderTest extends TestCase
     /** @var SignatureBuilder|MockObject */
     private $signatureBuilderMock;
 
-    /** @var ProctorioProvider */
+    /** @var ProctorioAccessProvider */
     private $subject;
 
     /** @var ResponseInterface|MockObject */
@@ -60,13 +61,13 @@ class ProctorioProviderTest extends TestCase
         $this->responseMock = $this->createMock(ResponseInterface::class);
         $this->proctorioRequestHandlerMock = $this->createMock(ProctorioRequestHandler::class);
         $this->signatureBuilderMock = $this->createMock(SignatureBuilder::class);
-        $this->subject = new ProctorioProvider(
+        $this->subject = new ProctorioAccessProvider(
             $this->proctorioRequestHandlerMock,
             $this->signatureBuilderMock
         );
     }
 
-    public function testRetrieve()
+    public function testRetrieve(): void
     {
         $this->signatureBuilderMock->expects($this->once())
             ->method('buildSignature')
@@ -77,7 +78,8 @@ class ProctorioProviderTest extends TestCase
             ->with('examplePayload=WithSomeValues&oauth_signature=signature_example')
             ->willReturn($this->responseMock);
 
-        $this->responseMock->expects($this->once())->method('getBody')->willReturn(self::RESPONSE_BODY_EXAMPLE);
+        $streamMock = $this->createMock(StreamInterface::class);
+        $this->responseMock->expects($this->once())->method('getBody')->willReturn($streamMock);
 
         $this->subject->retrieve(self::EXAMPLE_PAYLOAD, self::SECRET);
     }

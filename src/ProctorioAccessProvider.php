@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * This program is free software; you can redistribute it and/or
@@ -21,8 +21,9 @@
 namespace oat\Proctorio;
 
 use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\StreamInterface;
 
-class ProctorioProvider
+class ProctorioAccessProvider
 {
     /** @var ProctorioRequestHandler $requestHandler */
     private $requestHandler;
@@ -32,14 +33,22 @@ class ProctorioProvider
 
     /**
      * ProctorioProvider constructor.
-     *
      */
-    public function __construct(ProctorioRequestHandler $requestHandler, SignatureBuilder $signatureBuilder)
+    public function __construct(?ProctorioRequestHandler $requestHandler = null, ?SignatureBuilder $signatureBuilder = null)
     {
         $this->requestHandler = $requestHandler;
         $this->signatureBuilder = $signatureBuilder;
-    }
 
+        if ($this->signatureBuilder === null) {
+            $encoder = new Encoder();
+            $normalizer = new Normalizer();
+            $this->signatureBuilder = new SignatureBuilder($encoder, $normalizer);
+        }
+
+        if ($this->requestHandler === null) {
+            $this->requestHandler = new ProctorioRequestHandler();
+        }
+    }
 
     /**
      * @throws GuzzleException
@@ -52,6 +61,6 @@ class ProctorioProvider
 
         $response = $this->requestHandler->execute($requestPayloadString);
 
-        return $response->getBody();
+        return (string) $response->getBody();
     }
 }

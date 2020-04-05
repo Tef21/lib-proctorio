@@ -20,6 +20,7 @@
 
 namespace oat\Proctorio;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
@@ -36,10 +37,14 @@ class ProctorioRequestHandler
     /**
      * RequestBuilder constructor.
      */
-    public function __construct(ClientInterface $httpClient, string $url = null)
+    public function __construct(ClientInterface $httpClient = null, string $url = null)
     {
         $this->url = $url;
         $this->httpClient = $httpClient;
+
+        if ($this->httpClient === null) {
+            $this->httpClient = new Client();
+        }
     }
 
     /**
