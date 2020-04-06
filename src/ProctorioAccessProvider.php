@@ -54,9 +54,8 @@ class ProctorioAccessProvider
      */
     public function retrieve(array $payload, string $secret): string
     {
-        $requestPayload = $payload;
-        $requestPayload['oauth_signature'] = $this->signatureBuilder->buildSignature($payload, $secret);
-        $requestPayloadString = http_build_query($requestPayload);
+        $payload['oauth_signature'] = $this->signatureBuilder->buildSignature($payload, $secret);
+        $requestPayloadString = http_build_query($payload);
 
         $response = $this->requestHandler->execute($requestPayloadString);
 
