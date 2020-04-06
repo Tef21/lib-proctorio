@@ -28,7 +28,7 @@ class SignatureBuilder
     /** @var Normalizer */
     private $normalizer;
 
-    public function __construct(Encoder $encoder, Normalizer $normalizer)
+    public function __construct(Encoder $encoder = null, Normalizer $normalizer = null)
     {
         $this->encoder = $encoder;
         $this->normalizer = $normalizer;

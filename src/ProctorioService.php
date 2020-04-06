@@ -30,7 +30,7 @@ class ProctorioService implements RemoteProctoringInterface
     /** @var ProctorioConfig $config */
     private $config;
 
-    public function __construct(ProctorioAccessProvider $proctorioProvider, ProctorioConfig $proctorioConfig)
+    public function __construct(ProctorioAccessProvider $proctorioProvider = null, ProctorioConfig $proctorioConfig = null)
     {
         $this->provider = $proctorioProvider;
         $this->config = $proctorioConfig;

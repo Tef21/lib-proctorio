@@ -21,7 +21,6 @@
 namespace oat\Proctorio;
 
 use GuzzleHttp\Exception\GuzzleException;
-use Psr\Http\Message\StreamInterface;
 
 class ProctorioAccessProvider
 {
@@ -34,7 +33,7 @@ class ProctorioAccessProvider
     /**
      * ProctorioProvider constructor.
      */
-    public function __construct(?ProctorioRequestHandler $requestHandler = null, ?SignatureBuilder $signatureBuilder = null)
+    public function __construct(ProctorioRequestHandler $requestHandler = null, SignatureBuilder $signatureBuilder = null)
     {
         $this->requestHandler = $requestHandler;
         $this->signatureBuilder = $signatureBuilder;
