@@ -61,19 +61,14 @@ class ProctorioServiceTest extends TestCase
 
     public function testCallRemoteProctoring(): void
     {
+        $this->configMock->expects($this->once())
+            ->method('configure')
+            ->with(self::PARAMS_EXAMPLE)
+            ->willReturn(self::CONFIG_EXAMPLE);
         $this->proctorioProviderMock->expects($this->once())
             ->method('retrieve')
             ->with(self::CONFIG_EXAMPLE, self::SECRET)
             ->willReturn('string');
-        $this->subject->callRemoteProctoring(self::CONFIG_EXAMPLE, self::SECRET);
-    }
-
-    public function testBuildConfig(): void
-    {
-        $this->configMock->expects($this->once())
-            ->method('configure')
-            ->with(self::PARAMS_EXAMPLE)
-            ->willReturn([]);
-        $this->subject->buildConfig(self::PARAMS_EXAMPLE);
+        $this->subject->callRemoteProctoring(self::PARAMS_EXAMPLE, self::SECRET);
     }
 }
