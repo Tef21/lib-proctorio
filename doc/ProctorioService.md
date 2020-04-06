@@ -3,7 +3,7 @@
 Proctorio service allow to communicate with Proctorio api. 
 
 ## Implementation
-ProctorioService is implementation of RemoteProctoringServiceInterface that allow:
+ProctorioService is an implementation of RemoteProctoringServiceInterface that allow:
 - calling remote proctoring
 - buillding a config for remote proctoring call
 
