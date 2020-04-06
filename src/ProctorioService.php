@@ -27,32 +27,27 @@ class ProctorioService implements RemoteProctoringInterface
     /** @var ProctorioAccessProvider $provider */
     private $provider;
 
-    /** @var ProctorioConfig $config */
-    private $config;
+    /** @var ProctorioConfig $configBuilder */
+    private $configBuilder;
 
     public function __construct(ProctorioAccessProvider $proctorioProvider = null, ProctorioConfig $proctorioConfig = null)
     {
         $this->provider = $proctorioProvider;
-        $this->config = $proctorioConfig;
+        $this->configBuilder = $proctorioConfig;
 
         if ($this->provider === null) {
             $this->provider = new ProctorioAccessProvider();
         }
-        if ($this->config === null) {
-            $this->config = new ProctorioConfig();
+        if ($this->configBuilder === null) {
+            $this->configBuilder = new ProctorioConfig();
         }
     }
 
     /**
      * @throws GuzzleException
      */
-    public function callRemoteProctoring(array $config, string $secret): string
+    public function callRemoteProctoring(array $parameters, string $secret): string
     {
-        return $this->provider->retrieve($config, $secret);
-    }
-
-    public function buildConfig(array $parameters): array
-    {
-        return $this->config->configure($parameters);
+        return $this->provider->retrieve($this->configBuilder->configure($parameters), $secret);
     }
 }

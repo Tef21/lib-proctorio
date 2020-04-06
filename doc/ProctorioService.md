@@ -25,8 +25,7 @@ class MyProctorioHandler
     
     public function handleProctoring()
     {
-        $config = $this->getProctorioService()->buildConfig([]);
-        $this->getProctorioService()->callRemoteProctoring($config, 'secret');
+        $this->getProctorioService()->callRemoteProctoring($params, 'secret');
     }
 }
 
