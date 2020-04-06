@@ -37,8 +37,7 @@ class ProctorioServiceTest extends TestCase
 {
     private const CONFIG_EXAMPLE = ['exampleKey' => 'exampleValue'];
     private const SECRET = 'secret';
-    private const PARAMS_EXAMPLE = ['paramKey' => 'paramValue']
-    ;
+    private const PARAMS_EXAMPLE = ['paramKey' => 'paramValue'];
 
     /** @var ProctorioAccessProvider|MockObject */
     private $proctorioProviderMock;
