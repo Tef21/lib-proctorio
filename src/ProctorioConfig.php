@@ -20,7 +20,7 @@
 
 namespace oat\Proctorio;
 
-use Ramsey\Uuid\Uuid;
+use oat\Proctorio\Exception\ProctorioParameterException;
 
 class ProctorioConfig
 {
@@ -43,14 +43,17 @@ class ProctorioConfig
     public const DEFAULT_OAUTH_VERSION = '1.0';
     public const POST_MANHOOD = 'POST';
 
+    /**
+     * @throws ProctorioParameterException
+     */
     public function configure(array $parameters): array
     {
         return [
-            self::LAUNCH_URL => $this->getDefaultValue($parameters, self::LAUNCH_URL, self::getProctorioDefaultUrl()),
-            self::USER_ID => $this->getDefaultValue($parameters, self::USER_ID),
-            self::OAUTH_CONSUMER_KEY => $this->getDefaultValue($parameters, self::OAUTH_CONSUMER_KEY),
-            self::EXAM_START => $this->getDefaultValue($parameters, self::EXAM_START),
-            self::EXAM_TAKE => $this->getDefaultValue($parameters, self::EXAM_TAKE),
+            self::LAUNCH_URL => $parameters[self::LAUNCH_URL],
+            self::USER_ID => $parameters[self::USER_ID],
+            self::OAUTH_CONSUMER_KEY => $parameters[self::OAUTH_CONSUMER_KEY],
+            self::EXAM_START => $parameters[self::EXAM_START],
+            self::EXAM_TAKE => $parameters[self::EXAM_TAKE],
             self::EXAM_END => $this->getDefaultValue($parameters, self::EXAM_END),
             self::EXAM_SETTINGS => $this->getDefaultValue($parameters, self::EXAM_SETTINGS),
             self::FULL_NAME => $this->getDefaultValue($parameters, self::FULL_NAME),

@@ -89,13 +89,17 @@ class ProctorioConfigTest extends TestCase
 
     public function testConfigureDefaultValues(): void
     {
-        $result = $this->subject->configure([ProctorioConfig::OAUTH_NONCE => self::OAUTH_NONCE_CUSTOM_VALUE]);
+        $result = $this->subject->configure([
+            ProctorioConfig::LAUNCH_URL => self::LAUNCH_URL_CUSTOM_VALUE,
+            ProctorioConfig::USER_ID => self::OAUTH_NONCE_CUSTOM_VALUE,
+            ProctorioConfig::OAUTH_CONSUMER_KEY => self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE,
+            ProctorioConfig::EXAM_START => self::EXAM_START_CUSTOM_VALUE,
+            ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
+        ]);
         $this->checkIfAllKeysArePresent($result);
 
         $this->assertEquals(ProctorioConfig::HMAC_SHA_1, $result[ProctorioConfig::OAUTH_SIGNATURE_METHOD]);
-        $this->assertEquals(self::OAUTH_NONCE_CUSTOM_VALUE, $result[ProctorioConfig::OAUTH_NONCE]);
-        $this->assertEquals(ProctorioConfig::getProctorioDefaultUrl(), $result[ProctorioConfig::LAUNCH_URL]);
-        $this->assertEquals('', $result[ProctorioConfig::USER_ID]);
+        $this->assertEquals(ProctorioConfig::DEFAULT_OAUTH_VERSION, $result[ProctorioConfig::OAUTH_VERSION]);
     }
 
     private function checkIfAllKeysArePresent(array $result): void

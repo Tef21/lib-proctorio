@@ -21,33 +21,37 @@
 namespace oat\Proctorio;
 
 use GuzzleHttp\Exception\GuzzleException;
+use oat\Proctorio\Exception\ProctorioParameterException;
 
 class ProctorioService implements RemoteProctoringInterface
 {
     /** @var ProctorioAccessProvider $provider */
     private $provider;
 
-    /** @var ProctorioConfig $configBuilder */
-    private $configBuilder;
+    /** @var ProctorioConfigValidator  */
+    private $validator;
 
-    public function __construct(ProctorioAccessProvider $proctorioProvider = null, ProctorioConfig $proctorioConfig = null)
+    public function __construct(ProctorioAccessProvider $proctorioProvider = null, ProctorioConfigValidator $validator = null)
     {
         $this->provider = $proctorioProvider;
-        $this->configBuilder = $proctorioConfig;
+        $this->validator = $validator;
 
         if ($this->provider === null) {
             $this->provider = new ProctorioAccessProvider();
         }
-        if ($this->configBuilder === null) {
-            $this->configBuilder = new ProctorioConfig();
+        if ($this->validator === null) {
+            $this->validator = new ProctorioConfigValidator();
         }
     }
 
     /**
      * @throws GuzzleException
+     * @throws ProctorioParameterException
      */
     public function callRemoteProctoring(array $parameters, string $secret): string
     {
-        return $this->provider->retrieve($this->configBuilder->configure($parameters), $secret);
+        $this->validator->validate($parameters);
+        $config = new ProctorioConfig();
+        return $this->provider->retrieve($config->configure($parameters), $secret);
     }
 }
