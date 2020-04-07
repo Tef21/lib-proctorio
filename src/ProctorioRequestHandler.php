@@ -55,7 +55,14 @@ class ProctorioRequestHandler
         $request = new Request(
             'POST',
             $this->getUrl(),
-            [],
+            [
+                'headers' => [
+                        'Content-Type' => 'application/x-www-form-urlencoded',
+                    ],
+                'curl' => [
+                    CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+                ],
+            ],
             $payload
         );
 
