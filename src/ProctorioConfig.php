@@ -21,6 +21,7 @@
 namespace oat\Proctorio;
 
 use oat\Proctorio\Exception\ProctorioParameterException;
+use Ramsey\Uuid\Uuid;
 
 class ProctorioConfig
 {
@@ -52,22 +53,26 @@ class ProctorioConfig
             self::LAUNCH_URL => $parameters[self::LAUNCH_URL],
             self::USER_ID => $parameters[self::USER_ID],
             self::OAUTH_CONSUMER_KEY => $parameters[self::OAUTH_CONSUMER_KEY],
-            self::EXAM_START => $parameters[self::EXAM_START],
+            self::EXAM_START => $parameters[self::LAUNCH_URL],
             self::EXAM_TAKE => $parameters[self::EXAM_TAKE],
             self::EXAM_END => $this->getDefaultValue($parameters, self::EXAM_END),
             self::EXAM_SETTINGS => $this->getDefaultValue($parameters, self::EXAM_SETTINGS),
-            self::FULL_NAME => $this->getDefaultValue($parameters, self::FULL_NAME),
-            self::EXAM_TAG => $this->getDefaultValue($parameters, self::EXAM_TAG),
+            self::FULL_NAME => $this->getDefaultValue($parameters, self::FULL_NAME, 'name'),
+            self::EXAM_TAG => $this->getDefaultValue($parameters, self::EXAM_TAG, 'tag'),
             self::OAUTH_SIGNATURE_METHOD => $this->getDefaultValue($parameters, self::OAUTH_SIGNATURE_METHOD, self::HMAC_SHA_1),
             self::OAUTH_VERSION => $this->getDefaultValue($parameters, self::OAUTH_VERSION, self::DEFAULT_OAUTH_VERSION),
-            self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP),
-            self::OAUTH_NONCE => $this->getDefaultValue($parameters, self::OAUTH_NONCE),
+            self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP, (string) time()),
+            self::OAUTH_NONCE => $this->getDefaultValue($parameters, self::OAUTH_NONCE, (string) Uuid::uuid4() ),
         ];
     }
 
     private function getDefaultValue(array $parameters, string $field, string $default = ''): string
     {
-        return $parameters[$field] ?? $default;
+        if (isset($parameters[$field])) {
+            return (string) $parameters[$field];
+        }
+
+        return $default;
     }
 
     public static function getProctorioDefaultUrl(): string

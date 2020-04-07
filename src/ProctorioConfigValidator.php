@@ -31,22 +31,25 @@ class ProctorioConfigValidator
      *
      * @throws ProctorioParameterException
      */
-    public function validate(array $proctorioParameters)
+    public function validate(array $parameters): void
     {
-        if (!$this->requriedFieldsAreSet($proctorioParameters)) {
-            throw new ProctorioParameterException('Missing required key');
+        foreach ($this->requriedFields() as $field) {
+            if (!isset($parameters[$field])) {
+                throw new ProctorioParameterException(sprintf('Missing required key: %s', $field));
+            }
         }
     }
 
-    private function requriedFieldsAreSet(): bool
+    private function requriedFields(): array
     {
-        return isset(
-            $proctorioParameters[ProctorioConfig::LAUNCH_URL],
-            $proctorioParameters[ProctorioConfig::USER_ID],
-            $proctorioParameters[ProctorioConfig::OAUTH_CONSUMER_KEY],
-            $proctorioParameters[ProctorioConfig::EXAM_TAKE],
-            $proctorioParameters[ProctorioConfig::EXAM_END]
-        );
+        return [
+            ProctorioConfig::LAUNCH_URL,
+            ProctorioConfig::USER_ID,
+            ProctorioConfig::OAUTH_CONSUMER_KEY,
+            ProctorioConfig::EXAM_TAKE,
+            ProctorioConfig::EXAM_END,
+            ProctorioConfig::EXAM_SETTINGS
+        ];
     }
 
 }
