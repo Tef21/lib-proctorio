@@ -75,7 +75,7 @@ class ProctorioConfigTest extends TestCase
         $this->assertEquals($result[ProctorioConfig::LAUNCH_URL], self::LAUNCH_URL_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::USER_ID], self::USER_ID_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::OAUTH_CONSUMER_KEY], self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
-        $this->assertEquals($result[ProctorioConfig::EXAM_START], self::EXAM_START_CUSTOM_VALUE);
+        $this->assertEquals($result[ProctorioConfig::EXAM_START], self::LAUNCH_URL_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::EXAM_TAKE], self::EXAM_TAKE_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::EXAM_END], self::EXAM_END_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::EXAM_SETTINGS], self::EXAM_SETTINGS_CUSTOM_VALUE);

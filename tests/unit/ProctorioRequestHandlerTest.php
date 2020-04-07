@@ -58,7 +58,14 @@ class ProctorioRequestHandlerTest extends TestCase
                 new Request(
                     'POST',
                     'http://localhost',
-                    [],
+                    [
+                        'headers' => [
+                            'Content-Type' => 'application/x-www-form-urlencoded',
+                        ],
+                        'curl' => [
+                            CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+                        ],
+                    ],
                     ''
                 )
             )

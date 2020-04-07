@@ -49,12 +49,12 @@ class ProctorioServiceTest extends TestCase
         ProctorioConfig::EXAM_TAKE  => self::EXAM_TAKE_CUSTOM_VALUE,
         ProctorioConfig::EXAM_END  => '',
         ProctorioConfig::EXAM_SETTINGS  => '',
-        ProctorioConfig::FULL_NAME  => '',
-        ProctorioConfig::EXAM_TAG  => '',
+        ProctorioConfig::FULL_NAME  => 'name',
+        ProctorioConfig::EXAM_TAG  => 'tag',
         ProctorioConfig::OAUTH_SIGNATURE_METHOD  => 'HMAC-SHA1',
         ProctorioConfig::OAUTH_VERSION  => '1.0',
-        ProctorioConfig::OAUTH_TIMESTAMP  => '',
-        ProctorioConfig::OAUTH_NONCE => '',
+        ProctorioConfig::OAUTH_TIMESTAMP  => 'time',
+        ProctorioConfig::OAUTH_NONCE => 'nonce',
     ];
     private const SECRET = 'secret';
     private const PARAMS_EXAMPLE = [
@@ -63,6 +63,8 @@ class ProctorioServiceTest extends TestCase
         ProctorioConfig::OAUTH_CONSUMER_KEY => self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE,
         ProctorioConfig::EXAM_START => self::LAUNCH_URL_CUSTOM_VALUE,
         ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
+        ProctorioConfig::OAUTH_TIMESTAMP  => 'time',
+        ProctorioConfig::OAUTH_NONCE => 'nonce',
     ];
 
     /** @var ProctorioAccessProvider|MockObject */
