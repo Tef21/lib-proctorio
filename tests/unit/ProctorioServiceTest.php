@@ -44,8 +44,6 @@ class ProctorioServiceTest extends TestCase
         ProctorioConfig::EXAM_TAKE  => self::EXAM_TAKE_CUSTOM_VALUE,
         ProctorioConfig::EXAM_END  => '',
         ProctorioConfig::EXAM_SETTINGS  => '',
-        ProctorioConfig::FULL_NAME  => 'name',
-        ProctorioConfig::EXAM_TAG  => 'tag',
         ProctorioConfig::OAUTH_SIGNATURE_METHOD  => 'HMAC-SHA1',
         ProctorioConfig::OAUTH_VERSION  => '1.0',
         ProctorioConfig::OAUTH_TIMESTAMP  => 'time',
@@ -91,6 +89,8 @@ class ProctorioServiceTest extends TestCase
             ->method('retrieve')
             ->with(self::CONFIG_EXAMPLE, self::SECRET)
             ->willReturn('string');
+        // Execute
+
         $this->subject->callRemoteProctoring(self::PARAMS_EXAMPLE, self::SECRET);
     }
 }
