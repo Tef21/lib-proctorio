@@ -89,6 +89,15 @@ class ProctorioConfigTest extends TestCase
         $this->assertEquals($result[ProctorioConfig::OAUTH_NONCE], self::OAUTH_NONCE_CUSTOM_VALUE);
     }
 
+    public function testConfigureArrayWhenTagEmpty()
+    {
+        $params = $this->getCustomParameters();
+        unset($params[ProctorioConfig::FULL_NAME]);
+        $result = $this->subject->configure($params);
+        $this->assertSame(self::EXAM_TAG_CUSTOM_VALUE ,$result[ProctorioConfig::EXAM_TAG]);
+        $this->assertFalse(isset($result[ProctorioConfig::FULL_NAME]));
+    }
+
     public function testConfigureDefaultValues(): void
     {
         $result = $this->subject->configure([

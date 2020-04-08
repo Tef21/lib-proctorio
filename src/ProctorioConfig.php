@@ -47,11 +47,13 @@ class ProctorioConfig
     public const POST_MANHOOD = 'POST';
 
     /**
+     * Proctorio require array in specific order
+     * We will remove unset config values if empty.
      * @throws ProctorioParameterException
      */
     public function configure(array $parameters): array
     {
-        return [
+        $fullOrderedParams = [
             self::LAUNCH_URL => $parameters[self::LAUNCH_URL],
             self::USER_ID => $parameters[self::USER_ID],
             self::OAUTH_CONSUMER_KEY => $parameters[self::OAUTH_CONSUMER_KEY],
@@ -59,21 +61,43 @@ class ProctorioConfig
             self::EXAM_TAKE => $parameters[self::EXAM_TAKE],
             self::EXAM_END => $this->getDefaultValue($parameters, self::EXAM_END),
             self::EXAM_SETTINGS => $this->getDefaultValue($parameters, self::EXAM_SETTINGS),
-            self::FULL_NAME => $this->getDefaultValue($parameters, self::FULL_NAME, 'name'),
-            self::EXAM_TAG => $this->getDefaultValue($parameters, self::EXAM_TAG, 'tag'),
+            self::EXAM_TAG => $parameters[self::EXAM_TAG] ?? null,
+            self::FULL_NAME => $parameters[self::FULL_NAME] ?? null,
             self::OAUTH_SIGNATURE_METHOD => $this->getDefaultValue($parameters, self::OAUTH_SIGNATURE_METHOD, self::HMAC_SHA_1),
             self::OAUTH_VERSION => $this->getDefaultValue($parameters, self::OAUTH_VERSION, self::DEFAULT_OAUTH_VERSION),
-            self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP, (string) time()),
-            self::OAUTH_NONCE => $this->getDefaultValue($parameters, self::OAUTH_NONCE, (string) Uuid::uuid4() ),
+            self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP, (string)time()),
+            self::OAUTH_NONCE => $this->getDefaultValue($parameters, self::OAUTH_NONCE, (string)Uuid::uuid4()),
         ];
+
+        return $this->cleanEmptyNonMandatoryFields($fullOrderedParams);
     }
 
     private function getDefaultValue(array $parameters, string $field, string $default = ''): string
     {
         if (isset($parameters[$field])) {
-            return (string) $parameters[$field];
+            return (string)$parameters[$field];
+        }
+        return $default;
+    }
+
+    private function getNonMandatoryFields(): array
+    {
+        return [
+            self::FULL_NAME,
+            self::EXAM_TAG
+        ];
+    }
+
+
+    private function cleanEmptyNonMandatoryFields(array $parameters): array
+    {
+        foreach ($this->getNonMandatoryFields() as $field)
+        {
+            if ($parameters[$field] === null) {
+                unset($parameters[$field]);
+            }
         }
 
-        return $default;
+        return $parameters;
     }
 }
