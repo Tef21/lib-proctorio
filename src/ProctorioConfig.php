@@ -74,9 +74,4 @@ class ProctorioConfig
 
         return $default;
     }
-
-    public static function getProctorioDefaultUrl(): string
-    {
-        return sprintf(self::PROCTORIO_URL, self::CURRENT_DEFAULT_REGION);
-    }
 }
