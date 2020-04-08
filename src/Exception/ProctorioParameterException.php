@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * This program is free software; you can redistribute it and/or
@@ -18,9 +18,12 @@
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
  */
 
+declare(strict_types=1);
 
 namespace oat\Proctorio\Exception;
 
-class ProctorioParameterException extends \Exception
+use Exception;
+
+class ProctorioParameterException extends Exception
 {
 }

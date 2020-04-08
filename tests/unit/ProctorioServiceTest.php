@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * This program is free software; you can redistribute it and/or
@@ -18,12 +18,7 @@
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
  */
 
-/**
- * Created by PhpStorm.
- * User: bartlomiejmarszal
- * Date: 2020-04-01
- * Time: 16:10
- */
+declare(strict_types=1);
 
 namespace oat\Proctorio\tests\unit;
 
