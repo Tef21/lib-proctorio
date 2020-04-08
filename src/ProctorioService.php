@@ -30,19 +30,12 @@ class ProctorioService implements RemoteProctoringInterface
     /** @var ProctorioAccessProvider $provider */
     private $provider;
 
-    /** @var ProctorioConfigValidator  */
-    private $validator;
-
-    public function __construct(ProctorioAccessProvider $proctorioProvider = null, ProctorioConfigValidator $validator = null)
+    public function __construct(ProctorioAccessProvider $proctorioProvider = null)
     {
         $this->provider = $proctorioProvider;
-        $this->validator = $validator;
 
         if ($this->provider === null) {
             $this->provider = new ProctorioAccessProvider();
-        }
-        if ($this->validator === null) {
-            $this->validator = new ProctorioConfigValidator();
         }
     }
 
@@ -52,7 +45,6 @@ class ProctorioService implements RemoteProctoringInterface
      */
     public function callRemoteProctoring(array $parameters, string $secret): string
     {
-        $this->validator->validate($parameters);
         $config = new ProctorioConfig();
         return $this->provider->retrieve($config->configure($parameters), $secret);
     }

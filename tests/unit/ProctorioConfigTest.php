@@ -77,7 +77,7 @@ class ProctorioConfigTest extends TestCase
         $this->assertEquals($result[ProctorioConfig::LAUNCH_URL], self::LAUNCH_URL_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::USER_ID], self::USER_ID_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::OAUTH_CONSUMER_KEY], self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
-        $this->assertEquals($result[ProctorioConfig::EXAM_START], self::LAUNCH_URL_CUSTOM_VALUE);
+        $this->assertEquals($result[ProctorioConfig::EXAM_START], self::EXAM_START_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::EXAM_TAKE], self::EXAM_TAKE_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::EXAM_END], self::EXAM_END_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::EXAM_SETTINGS], self::EXAM_SETTINGS_CUSTOM_VALUE);
@@ -106,10 +106,36 @@ class ProctorioConfigTest extends TestCase
             ProctorioConfig::OAUTH_CONSUMER_KEY => self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE,
             ProctorioConfig::EXAM_START => self::EXAM_START_CUSTOM_VALUE,
             ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
+            ProctorioConfig::EXAM_SETTINGS=> self::EXAM_SETTINGS_CUSTOM_VALUE,
         ]);
 
         $this->assertEquals(ProctorioConfig::HMAC_SHA_1, $result[ProctorioConfig::OAUTH_SIGNATURE_METHOD]);
         $this->assertEquals(ProctorioConfig::DEFAULT_OAUTH_VERSION, $result[ProctorioConfig::OAUTH_VERSION]);
+    }
+
+    public function testConfigureReturnArrayInRightOrder()
+    {
+        $result = $this->subject->configure($this->getCustomParameters());
+        $this->assertSame($this->getRequiredOrder(), array_keys($result));
+    }
+
+    private function getRequiredOrder()
+    {
+        return [
+            0 => 'launch_url',
+            1 => 'user_id',
+            2 => 'oauth_consumer_key',
+            3 => 'exam_start',
+            4 => 'exam_take',
+            5 => 'exam_end',
+            6 => 'exam_settings',
+            7 => 'exam_tag',
+            8 => 'fullname',
+            9 => 'oauth_signature_method',
+            10 => 'oauth_version',
+            11 => 'oauth_timestamp',
+            12 => 'oauth_nonce',
+        ];
     }
 
     private function checkIfAllKeysArePresent(array $result): void

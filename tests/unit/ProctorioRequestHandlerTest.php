@@ -45,8 +45,8 @@ class ProctorioRequestHandlerTest extends TestCase
         $this->responseMock = $this->createMock(ResponseInterface::class);
         $this->clientMock = $this->createMock(ClientInterface::class);
         $this->subject = new ProctorioRequestHandler(
-            $this->clientMock,
-            'http://localhost'
+            'http://localhost',
+            $this->clientMock
         );
     }
 

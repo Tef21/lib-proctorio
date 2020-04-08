@@ -46,58 +46,68 @@ class ProctorioConfig
     public const DEFAULT_OAUTH_VERSION = '1.0';
     public const POST_MANHOOD = 'POST';
 
+    private const MANDATORY_FIELD = 'mandatory';
+
     /**
      * Proctorio require array in specific order
-     * We will remove unset config values if empty.
+     * Each parameter may have default value
+     * Default value will be set when no field param provided
+     * When parameter is not set and
+     * it doesn't have default value and is not mandatory
+     * it will be omitted
+     *
+     * @throws ProctorioParameterException
+     */
+    private function getProctorioOrderedParams(): array
+    {
+        return [
+            self::LAUNCH_URL => self::MANDATORY_FIELD,
+            self::USER_ID => self::MANDATORY_FIELD,
+            self::OAUTH_CONSUMER_KEY => self::MANDATORY_FIELD,
+            self::EXAM_START => self::MANDATORY_FIELD,
+            self::EXAM_TAKE => self::MANDATORY_FIELD,
+            self::EXAM_END => null,
+            self::EXAM_SETTINGS => self::MANDATORY_FIELD,
+            self::EXAM_TAG => null,
+            self::FULL_NAME => null,
+            self::OAUTH_SIGNATURE_METHOD => self::HMAC_SHA_1,
+            self::OAUTH_VERSION => self::DEFAULT_OAUTH_VERSION,
+            self::OAUTH_TIMESTAMP => (string) time(),
+            self::OAUTH_NONCE => Uuid::uuid4()->toString(),
+        ];
+    }
+
+    /**
+     * @throws ProctorioParameterException
+     */
+    private function hydrateOrderedProctorioParameterList(array $parameters): array
+    {
+        $hydratedParameters = [];
+        foreach ($this->getProctorioOrderedParams() as $paramName => $default) {
+            if ($default === self::MANDATORY_FIELD && !isset($parameters[$paramName])) {
+                throw new ProctorioParameterException(
+                    sprintf('Mandatory field %s missing', $paramName)
+                );
+            }
+
+            if (isset($parameters[$paramName])) {
+                $hydratedParameters[$paramName] = $parameters[$paramName];
+                continue;
+            }
+
+            if ($default !== null) {
+                $hydratedParameters[$paramName] = $default;
+            }
+        }
+
+        return $hydratedParameters;
+    }
+
+    /**
      * @throws ProctorioParameterException
      */
     public function configure(array $parameters): array
     {
-        $fullOrderedParams = [
-            self::LAUNCH_URL => $parameters[self::LAUNCH_URL],
-            self::USER_ID => $parameters[self::USER_ID],
-            self::OAUTH_CONSUMER_KEY => $parameters[self::OAUTH_CONSUMER_KEY],
-            self::EXAM_START => $parameters[self::LAUNCH_URL],
-            self::EXAM_TAKE => $parameters[self::EXAM_TAKE],
-            self::EXAM_END => $this->getDefaultValue($parameters, self::EXAM_END),
-            self::EXAM_SETTINGS => $this->getDefaultValue($parameters, self::EXAM_SETTINGS),
-            self::EXAM_TAG => $parameters[self::EXAM_TAG] ?? null,
-            self::FULL_NAME => $parameters[self::FULL_NAME] ?? null,
-            self::OAUTH_SIGNATURE_METHOD => $this->getDefaultValue($parameters, self::OAUTH_SIGNATURE_METHOD, self::HMAC_SHA_1),
-            self::OAUTH_VERSION => $this->getDefaultValue($parameters, self::OAUTH_VERSION, self::DEFAULT_OAUTH_VERSION),
-            self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP, (string)time()),
-            self::OAUTH_NONCE => $this->getDefaultValue($parameters, self::OAUTH_NONCE, (string)Uuid::uuid4()),
-        ];
-
-        return $this->cleanEmptyNonMandatoryFields($fullOrderedParams);
-    }
-
-    private function getDefaultValue(array $parameters, string $field, string $default = ''): string
-    {
-        if (isset($parameters[$field])) {
-            return (string)$parameters[$field];
-        }
-        return $default;
-    }
-
-    private function getNonMandatoryFields(): array
-    {
-        return [
-            self::FULL_NAME,
-            self::EXAM_TAG
-        ];
-    }
-
-
-    private function cleanEmptyNonMandatoryFields(array $parameters): array
-    {
-        foreach ($this->getNonMandatoryFields() as $field)
-        {
-            if ($parameters[$field] === null) {
-                unset($parameters[$field]);
-            }
-        }
-
-        return $parameters;
+        return $this->hydrateOrderedProctorioParameterList($parameters);
     }
 }

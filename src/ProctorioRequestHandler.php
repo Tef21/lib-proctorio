@@ -39,7 +39,7 @@ class ProctorioRequestHandler
     /**
      * RequestBuilder constructor.
      */
-    public function __construct(ClientInterface $httpClient = null, string $url = null)
+    public function __construct(string $url, ClientInterface $httpClient = null)
     {
         $this->url = $url;
         $this->httpClient = $httpClient;

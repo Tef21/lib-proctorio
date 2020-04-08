@@ -47,7 +47,9 @@ class ProctorioAccessProvider
         }
 
         if ($this->requestHandler === null) {
-            $this->requestHandler = new ProctorioRequestHandler();
+            $this->requestHandler = new ProctorioRequestHandler(
+                sprintf(ProctorioConfig::LAUNCH_URL, ProctorioConfig::CURRENT_DEFAULT_REGION)
+            );
         }
     }
 
@@ -59,7 +61,7 @@ class ProctorioAccessProvider
         $payload['oauth_signature'] = $this->signatureBuilder->buildSignature($payload, $secret);
         $requestPayloadString = http_build_query($payload);
 
-        $response = $this->requestHandler->execute($requestPayloadString);
+        $response = $this->requestHandler->execute($requestPayloadString, $payload[ProctorioConfig::LAUNCH_URL]);
 
         return (string) $response->getBody();
     }
