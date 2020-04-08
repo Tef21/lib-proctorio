@@ -22,6 +22,7 @@ namespace oat\Proctorio\tests\unit;
 
 use oat\Proctorio\Encoder;
 use oat\Proctorio\Normalizer;
+use oat\Proctorio\ProctorioConfig;
 use oat\Proctorio\SignatureBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -49,7 +50,9 @@ class SignatureBuilderTest extends TestCase
     public function testBuildSignature(): void
     {
         $this->encoderMock->method('encode')->willReturn('key=value');
-        $result = $this->subject->buildSignature(['payload'], 'secret');
+        $result = $this->subject->buildSignature([
+            ProctorioConfig::LAUNCH_URL => 'http://proctorio.url.example'
+        ], 'secret');
 
         $this->assertEquals('B8HpmpY7D3isaP19rbwPchlVkNk=', $result);
     }

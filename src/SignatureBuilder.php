@@ -44,14 +44,16 @@ class SignatureBuilder
 
     public function buildSignature(array $payload, string $secret): string
     {
-        $signatureBaseString =
-            ProctorioConfig::POST_MANHOOD
-            . '&'
-            . $this->encoder->encode(ProctorioConfig::getProctorioDefaultUrl())
-            . '&'
-            . $this->encoder->encode($this->normalizer->normalize($payload));
+        $signatureBaseString = $this->buildSignatureBaseString($payload);
 
         $computedSignature = hash_hmac('sha1', $signatureBaseString, $secret, true);
         return base64_encode($computedSignature);
+    }
+
+    private function buildSignatureBaseString(array $payload): string
+    {
+        return ProctorioConfig::POST_MANHOOD . '&'
+            . $this->encoder->encode($payload[ProctorioConfig::LAUNCH_URL])
+            . '&' . $this->encoder->encode($this->normalizer->normalize($payload));
     }
 }
