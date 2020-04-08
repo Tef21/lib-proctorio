@@ -2,21 +2,14 @@
 
 ![TAO Logo](https://github.com/oat-sa/taohub-developer-guide/raw/master/resources/tao-logo.png)
 
-
-
-
 ## Description
 [Proctorio](https://proctorio.com/)
 
 
 Proctorio library allows us to create a signed request to the Proctorio provider
 
-
-Using state-of-the-art technology and end-to-end data security, 
-Proctorio ensures the total learning integrity of every assessment, every time. 
-Our software eliminates human error, bias, and much of the expense associated with remote proctoring and identity verification.
-
-Proctorio also integrates effortlessly with whatever learning management system you already use— no scheduling, waiting or additional logins required— for instant, objective, secure results.
+Proctorio ensures the total learning integrity of every assessment. 
+Proctorio may eliminates human error, bias, and much of the expense associated with remote proctoring and identity verification.
 
 ## Installation instructions
 
@@ -39,4 +32,40 @@ Now you can add it to `composer.json`:
 ```bash
 composer require oat-sa/lib-proctorio
 ```
+
 ## Library Wiki
+
+# RemoteProctoringService
+
+Proctorio service allow to communicate with Proctorio api. 
+
+## Implementation
+ProctorioService is an implementation of RemoteProctoringServiceInterface that allow:
+- calling remote proctoring
+- buillding a config for remote proctoring call
+
+
+## Example
+To use library you can use `ProctorioService` class
+
+```php
+<?php
+
+use oat\Proctorio\ProctorioService;
+use oat\Proctorio\ProctorioConfig;
+
+$proctorioService = new ProctorioService();
+
+$params = [
+    ProctorioConfig::LAUNCH_URL => 'http://proctorio.url.example',
+    ProctorioConfig::USER_ID => 'user_id',
+    ProctorioConfig::OAUTH_CONSUMER_KEY => 'your_oauth_key',
+    ProctorioConfig::EXAM_TAKE => 'https:\/\/tao.platform.instance\/.*',
+    ProctorioConfig::EXAM_END => 'https:\/\/tao.platform.instance\/.*',
+    ProctorioConfig::EXAM_SETTINGS => 'webtraffic',
+];
+
+$urls = $proctorioService->callRemoteProctoring($params, 'secret');
+}
+
+```
