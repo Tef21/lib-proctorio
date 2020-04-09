@@ -93,7 +93,7 @@ class ProctorioConfig
             }
 
             if ($paramName === ProctorioConfig::EXAM_SETTINGS) {
-                if (!is_array($proctorioParameters[$paramName])) {
+                if (!is_array($parameters[$paramName])) {
                     throw new ProctorioParameterException('exam_settings has to be array');
                 }
 

@@ -57,7 +57,7 @@ class ProctorioServiceTest extends TestCase
         ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
         ProctorioConfig::OAUTH_TIMESTAMP  => 'time',
         ProctorioConfig::OAUTH_NONCE => 'nonce',
-        ProctorioConfig::EXAM_SETTINGS  => self::EXAM_SETTINGS_EXAMPLE,
+        ProctorioConfig::EXAM_SETTINGS  => [self::EXAM_SETTINGS_EXAMPLE],
     ];
 
     /** @var ProctorioAccessProvider|MockObject */

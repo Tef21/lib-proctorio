@@ -73,7 +73,6 @@ class ProctorioConfigTest extends TestCase
 
     public function testConfigureCustomValues(): void
     {
-
         $result = $this->subject->configure($this->getCustomParameters(), self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
         $this->checkIfAllKeysArePresent($result);
 
@@ -98,7 +97,7 @@ class ProctorioConfigTest extends TestCase
         $params = $this->getCustomParameters();
         unset($params[ProctorioConfig::FULL_NAME]);
         $result = $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
-        $this->assertSame(self::EXAM_TAG_CUSTOM_VALUE ,$result[ProctorioConfig::EXAM_TAG]);
+        $this->assertSame(self::EXAM_TAG_CUSTOM_VALUE, $result[ProctorioConfig::EXAM_TAG]);
         $this->assertFalse(isset($result[ProctorioConfig::FULL_NAME]));
     }
 
@@ -109,7 +108,7 @@ class ProctorioConfigTest extends TestCase
             ProctorioConfig::USER_ID => self::OAUTH_NONCE_CUSTOM_VALUE,
             ProctorioConfig::EXAM_START => self::EXAM_START_CUSTOM_VALUE,
             ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
-            ProctorioConfig::EXAM_SETTINGS=> self::EXAM_SETTINGS_CUSTOM_VALUE,
+            ProctorioConfig::EXAM_SETTINGS => self::EXAM_SETTINGS_CUSTOM_VALUE,
         ], self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
 
         $this->assertEquals(ProctorioConfig::HMAC_SHA_1, $result[ProctorioConfig::OAUTH_SIGNATURE_METHOD]);
