@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * This program is free software; you can redistribute it and/or
@@ -18,20 +18,39 @@
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+declare(strict_types=1);
+
 namespace oat\Proctorio;
 
 class SignatureBuilder
 {
-    public function buildSignature(Encoder $encoder, Normalizer $normalizer, array $payload, string $secret): string
+    public const POST_METHOD = 'POST';
+
+    /** @var Encoder */
+    private $encoder;
+
+    /** @var Normalizer */
+    private $normalizer;
+
+    public function __construct(Encoder $encoder = null, Normalizer $normalizer = null)
     {
-        $signatureBaseString =
-            ProctorioConfig::POST_MANHOOD
-            . '&'
-            . $encoder->encode(ProctorioConfig::getProctorioDefaultUrl())
-            . '&'
-            . $encoder->encode($normalizer->normalize($payload));
+        $this->encoder = $encoder ?? new Encoder();
+        $this->normalizer = $normalizer ?? new Normalizer();
+    }
+
+
+    public function buildSignature(array $payload, string $secret): string
+    {
+        $signatureBaseString = $this->buildSignatureBaseString($payload);
 
         $computedSignature = hash_hmac('sha1', $signatureBaseString, $secret, true);
         return base64_encode($computedSignature);
+    }
+
+    private function buildSignatureBaseString(array $payload): string
+    {
+        return self::POST_METHOD . '&'
+            . $this->encoder->encode($payload[ProctorioConfig::LAUNCH_URL])
+            . '&' . $this->encoder->encode($this->normalizer->normalize($payload));
     }
 }
