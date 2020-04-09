@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace oat\Proctorio;
 
+use Exception;
 use oat\Proctorio\Exception\ProctorioParameterException;
 use Ramsey\Uuid\Uuid;
 
@@ -44,7 +45,7 @@ class ProctorioConfig
     public const OAUTH_NONCE = 'oauth_nonce';
     public const HMAC_SHA_1 = 'HMAC-SHA1';
     public const DEFAULT_OAUTH_VERSION = '1.0';
-    public const POST_MANHOOD = 'POST';
+    public const POST_METHOD = 'POST';
 
     private const MANDATORY_FIELD = 'mandatory';
 
@@ -57,6 +58,7 @@ class ProctorioConfig
      * it will be omitted
      *
      * @throws ProctorioParameterException
+     * @throws Exception
      */
     private function getProctorioOrderedParams(): array
     {
@@ -80,7 +82,7 @@ class ProctorioConfig
     /**
      * @throws ProctorioParameterException
      */
-    private function hydrateOrderedProctorioParameterList(array $parameters): array
+    private function createOrderedParamteres(array $parameters): array
     {
         $hydratedParameters = [];
         foreach ($this->getProctorioOrderedParams() as $paramName => $default) {
@@ -106,8 +108,9 @@ class ProctorioConfig
     /**
      * @throws ProctorioParameterException
      */
-    public function configure(array $parameters): array
+    public function configure(array $parameters, string $key): array
     {
-        return $this->hydrateOrderedProctorioParameterList($parameters);
+        $parameters[ProctorioConfig::OAUTH_CONSUMER_KEY] = $key;
+        return $this->createOrderedParamteres($parameters);
     }
 }

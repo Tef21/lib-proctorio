@@ -24,5 +24,5 @@ namespace oat\Proctorio;
 
 interface RemoteProctoringInterface
 {
-    public function callRemoteProctoring(array $config, string $secret): string;
+    public function callRemoteProctoring(array $config, string $key, string $secret): string;
 }

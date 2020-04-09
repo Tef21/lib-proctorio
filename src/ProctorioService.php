@@ -40,12 +40,16 @@ class ProctorioService implements RemoteProctoringInterface
     }
 
     /**
-     * @throws GuzzleException
-     * @throws ProctorioParameterException
+     * @param array $parameters paramteres required by ProctorioConfig
+     * @param string $key oauthkey
+     * @param string $secret oauth secret
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \oat\Proctorio\Exception\ProctorioParameterException
      */
-    public function callRemoteProctoring(array $parameters, string $secret): string
+    public function callRemoteProctoring(array $parameters, string $key, string $secret): string
     {
         $config = new ProctorioConfig();
-        return $this->provider->retrieve($config->configure($parameters), $secret);
+        return $this->provider->retrieve($config->configure($parameters, $key), $secret);
     }
 }

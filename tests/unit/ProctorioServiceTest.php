@@ -53,7 +53,6 @@ class ProctorioServiceTest extends TestCase
     private const PARAMS_EXAMPLE = [
         ProctorioConfig::LAUNCH_URL => self::LAUNCH_URL_CUSTOM_VALUE,
         ProctorioConfig::USER_ID => self::USER_ID_CUSTOM_VALUE,
-        ProctorioConfig::OAUTH_CONSUMER_KEY => self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE,
         ProctorioConfig::EXAM_START => self::LAUNCH_URL_CUSTOM_VALUE,
         ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
         ProctorioConfig::OAUTH_TIMESTAMP  => 'time',
@@ -83,6 +82,6 @@ class ProctorioServiceTest extends TestCase
             ->with(self::CONFIG_EXAMPLE, self::SECRET)
             ->willReturn('string');
         // Execute
-        $this->subject->callRemoteProctoring(self::PARAMS_EXAMPLE, self::SECRET);
+        $this->subject->callRemoteProctoring(self::PARAMS_EXAMPLE, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE, self::SECRET);
     }
 }

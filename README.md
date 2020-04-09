@@ -59,13 +59,12 @@ $proctorioService = new ProctorioService();
 $params = [
     ProctorioConfig::LAUNCH_URL => 'http://proctorio.url.example',
     ProctorioConfig::USER_ID => 'user_id',
-    ProctorioConfig::OAUTH_CONSUMER_KEY => 'your_oauth_key',
     ProctorioConfig::EXAM_TAKE => 'https:\/\/tao.platform.instance\/.*',
     ProctorioConfig::EXAM_END => 'https:\/\/tao.platform.instance\/.*',
     ProctorioConfig::EXAM_SETTINGS => 'webtraffic',
 ];
 
-$urls = $proctorioService->callRemoteProctoring($params, 'secret');
+$urls = $proctorioService->callRemoteProctoring($params, 'your_oauth_key', 'secret');
 }
 
 ```
