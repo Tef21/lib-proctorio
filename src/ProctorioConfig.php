@@ -93,6 +93,10 @@ class ProctorioConfig
             }
 
             if ($paramName === ProctorioConfig::EXAM_SETTINGS) {
+                if (!is_array($proctorioParameters[$paramName])) {
+                    throw new ProctorioParameterException('exam_settings has to be array');
+                }
+
                 $proctorioParameters[$paramName] = implode(',', $parameters[$paramName]);
                 continue;
             }

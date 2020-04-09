@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace oat\Proctorio\tests\unit;
 
+use oat\Proctorio\Exception\ProctorioParameterException;
 use oat\Proctorio\ProctorioConfig;
 use PHPUnit\Framework\TestCase;
 
@@ -155,5 +156,22 @@ class ProctorioConfigTest extends TestCase
         $this->assertArrayHasKey(ProctorioConfig::OAUTH_VERSION, $result);
         $this->assertArrayHasKey(ProctorioConfig::OAUTH_TIMESTAMP, $result);
         $this->assertArrayHasKey(ProctorioConfig::OAUTH_NONCE, $result);
+    }
+
+    public function testConfigureWithMissingParameters()
+    {
+        $params = $this->getCustomParameters();
+        unset($params[ProctorioConfig::LAUNCH_URL]);
+        $this->expectException(ProctorioParameterException::class);
+        $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
+    }
+
+    public function testConfigureWithExamSettingsAsString()
+    {
+        $params = $this->getCustomParameters();
+        $params[ProctorioConfig::EXAM_SETTINGS] = 'string';
+        $this->expectException(ProctorioParameterException::class);
+        $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
+
     }
 }
