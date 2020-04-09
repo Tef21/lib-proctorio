@@ -56,7 +56,7 @@ class ProctorioRequestHandler
     {
         $request = new Request(
             'POST',
-            $this->getUrl(),
+            $this->url,
             [
                 'headers' => [
                         'Content-Type' => 'application/x-www-form-urlencoded',
@@ -69,13 +69,5 @@ class ProctorioRequestHandler
         );
 
         return $this->httpClient->send($request);
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl(): string
-    {
-        return $this->url ?? ProctorioConfig::getProctorioDefaultUrl();
     }
 }
