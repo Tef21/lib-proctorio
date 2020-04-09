@@ -67,7 +67,7 @@ class ProctorioConfig
             self::OAUTH_CONSUMER_KEY => self::MANDATORY_FIELD,
             self::EXAM_START => self::MANDATORY_FIELD,
             self::EXAM_TAKE => self::MANDATORY_FIELD,
-            self::EXAM_END => null,
+            self::EXAM_END => self::MANDATORY_FIELD,
             self::EXAM_SETTINGS => self::MANDATORY_FIELD,
             self::EXAM_TAG => null,
             self::FULL_NAME => null,

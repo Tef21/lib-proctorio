@@ -109,6 +109,7 @@ class ProctorioConfigTest extends TestCase
             ProctorioConfig::EXAM_START => self::EXAM_START_CUSTOM_VALUE,
             ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
             ProctorioConfig::EXAM_SETTINGS => self::EXAM_SETTINGS_CUSTOM_VALUE,
+            ProctorioConfig::EXAM_END => self::EXAM_END_CUSTOM_VALUE
         ], self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
 
         $this->assertEquals(ProctorioConfig::HMAC_SHA_1, $result[ProctorioConfig::OAUTH_SIGNATURE_METHOD]);

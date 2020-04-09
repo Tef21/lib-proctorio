@@ -35,6 +35,7 @@ class ProctorioServiceTest extends TestCase
     private const USER_ID_CUSTOM_VALUE = 'user_id_custom';
     private const EXAM_TAKE_CUSTOM_VALUE = 'exam_take_custom';
     private const EXAM_SETTINGS_EXAMPLE = 'settings_example';
+    private const EXAM_END_CUSTOM_VALUE = 'exam_end_custom';
     private const SECRET = 'secret';
 
     private const CONFIG_EXAMPLE = [
@@ -43,6 +44,7 @@ class ProctorioServiceTest extends TestCase
         ProctorioConfig::OAUTH_CONSUMER_KEY  => self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE,
         ProctorioConfig::EXAM_START  => self::LAUNCH_URL_CUSTOM_VALUE,
         ProctorioConfig::EXAM_TAKE  => self::EXAM_TAKE_CUSTOM_VALUE,
+        ProctorioConfig::EXAM_END => self::EXAM_END_CUSTOM_VALUE,
         ProctorioConfig::EXAM_SETTINGS  => self::EXAM_SETTINGS_EXAMPLE,
         ProctorioConfig::OAUTH_SIGNATURE_METHOD  => 'HMAC-SHA1',
         ProctorioConfig::OAUTH_VERSION  => '1.0',
@@ -54,6 +56,7 @@ class ProctorioServiceTest extends TestCase
         ProctorioConfig::LAUNCH_URL => self::LAUNCH_URL_CUSTOM_VALUE,
         ProctorioConfig::USER_ID => self::USER_ID_CUSTOM_VALUE,
         ProctorioConfig::EXAM_START => self::LAUNCH_URL_CUSTOM_VALUE,
+        ProctorioConfig::EXAM_END => self::EXAM_END_CUSTOM_VALUE,
         ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
         ProctorioConfig::OAUTH_TIMESTAMP  => 'time',
         ProctorioConfig::OAUTH_NONCE => 'nonce',
