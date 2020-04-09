@@ -41,9 +41,7 @@ class ProctorioAccessProvider
         $this->signatureBuilder = $signatureBuilder;
 
         if ($this->signatureBuilder === null) {
-            $encoder = new Encoder();
-            $normalizer = new Normalizer();
-            $this->signatureBuilder = new SignatureBuilder($encoder, $normalizer);
+            $this->signatureBuilder = new SignatureBuilder();
         }
 
         if ($this->requestHandler === null) {
