@@ -22,7 +22,6 @@ declare(strict_types=1);
 
 namespace oat\Proctorio;
 
-
 class Normalizer
 {
     public function normalize(array $params): string

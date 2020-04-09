@@ -28,5 +28,4 @@ class Encoder
     {
         return rawurlencode($value);
     }
-
 }

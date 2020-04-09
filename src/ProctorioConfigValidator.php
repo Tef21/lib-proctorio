@@ -22,7 +22,6 @@ declare(strict_types=1);
 
 namespace oat\Proctorio;
 
-
 use oat\Proctorio\Exception\ProctorioParameterException;
 
 class ProctorioConfigValidator
@@ -52,5 +51,4 @@ class ProctorioConfigValidator
             ProctorioConfig::EXAM_SETTINGS
         ];
     }
-
 }
