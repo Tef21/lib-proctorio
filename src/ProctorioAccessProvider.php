@@ -26,7 +26,7 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class ProctorioAccessProvider
 {
-    /** @var ProctorioRequestHandler $requestHandler */
+    /** @var ProctorioRequestHandler */
     private $requestHandler;
 
     /** @var SignatureBuilder */

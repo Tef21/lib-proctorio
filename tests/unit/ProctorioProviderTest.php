@@ -36,7 +36,6 @@ class ProctorioProviderTest extends TestCase
     private const EXAMPLE_PAYLOAD = ['examplePayload' => 'WithSomeValues'];
     private const SECRET = 'secret';
     private const SIGNATURE_EXAMPLE = 'signature_example';
-    private const RESPONSE_BODY_EXAMPLE = 'some response';
 
 
     /** @var ProctorioRequestHandler|MockObject */

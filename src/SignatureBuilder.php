@@ -54,7 +54,7 @@ class SignatureBuilder
 
     private function buildSignatureBaseString(array $payload): string
     {
-        return ProctorioConfig::POST_MANHOOD . '&'
+        return ProctorioConfig::POST_METHOD . '&'
             . $this->encoder->encode($payload[ProctorioConfig::LAUNCH_URL])
             . '&' . $this->encoder->encode($this->normalizer->normalize($payload));
     }
