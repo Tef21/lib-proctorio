@@ -173,4 +173,12 @@ class ProctorioConfigTest extends TestCase
         $this->expectException(ProctorioParameterException::class);
         $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
     }
+
+    public function testConfigureWithExamSettingsWithIllegalStrings()
+    {
+        $params = $this->getCustomParameters();
+        $params[ProctorioConfig::EXAM_SETTINGS] = ['elem ', ' elem'];
+        $result = $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
+        $this->assertSame('elem,elem', $result[ProctorioConfig::EXAM_SETTINGS]);
+    }
 }

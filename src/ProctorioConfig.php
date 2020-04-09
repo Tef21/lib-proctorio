@@ -96,7 +96,7 @@ class ProctorioConfig
                     throw new ProctorioParameterException('exam_settings has to be array');
                 }
 
-                $proctorioParameters[$paramName] = implode(',', $parameters[$paramName]);
+                $proctorioParameters[$paramName] = implode(',', array_map('trim', $parameters[$paramName]));
                 continue;
             }
 
