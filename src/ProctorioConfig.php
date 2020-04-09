@@ -84,7 +84,7 @@ class ProctorioConfig
      */
     private function createOrderedParamteres(array $parameters): array
     {
-        $hydratedParameters = [];
+        $proctorioParameters = [];
         foreach ($this->getProctorioOrderedParams() as $paramName => $default) {
             if ($default === self::MANDATORY_FIELD && !isset($parameters[$paramName])) {
                 throw new ProctorioParameterException(
@@ -92,25 +92,31 @@ class ProctorioConfig
                 );
             }
 
+            if ($paramName === ProctorioConfig::EXAM_SETTINGS) {
+                $proctorioParameters[$paramName] = implode(',', $parameters[$paramName]);
+                continue;
+            }
+
             if (isset($parameters[$paramName])) {
-                $hydratedParameters[$paramName] = $parameters[$paramName];
+                $proctorioParameters[$paramName] = $parameters[$paramName];
                 continue;
             }
 
             if ($default !== null) {
-                $hydratedParameters[$paramName] = $default;
+                $proctorioParameters[$paramName] = $default;
             }
         }
 
-        return $hydratedParameters;
+        return $proctorioParameters;
     }
 
     /**
+     * @return string[]
      * @throws ProctorioParameterException
      */
     public function configure(array $parameters, string $key): array
     {
-        $parameters[ProctorioConfig::OAUTH_CONSUMER_KEY] = $key;
+        $parameters[self::OAUTH_CONSUMER_KEY] = $key;
         return $this->createOrderedParamteres($parameters);
     }
 }

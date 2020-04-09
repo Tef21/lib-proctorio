@@ -33,7 +33,10 @@ class ProctorioConfigTest extends TestCase
     private const EXAM_START_CUSTOM_VALUE = 'exam_start_custom';
     private const EXAM_TAKE_CUSTOM_VALUE = 'exam_take_custom';
     private const EXAM_END_CUSTOM_VALUE = 'exam_end_custom';
-    private const EXAM_SETTINGS_CUSTOM_VALUE = 'exam_settings_custom';
+    private const EXAM_SETTINGS_CUSTOM_ELEMENT = 'exam_settings_custom';
+    private const EXAM_SETTINGS_CUSTOM_ELEMENT_2 = 'exam_settings_custom_2';
+    private const EXAM_SETTINGS_CUSTOM_VALUE = [self::EXAM_SETTINGS_CUSTOM_ELEMENT, self::EXAM_SETTINGS_CUSTOM_ELEMENT_2];
+    private const EXAM_SETTINGS_EXPECTED_VALUE = 'exam_settings_custom,exam_settings_custom_2';
     private const FULL_NAME_CUSTOM_VALUE = 'full_name_custom';
     private const EXAM_TAG_CUSTOM_VALUE = 'exam_tag_custom';
     private const OAUTH_SIGNATURE_METHOD_CUSTOM_VALUE = 'oauth_signature_method_custom';
@@ -79,7 +82,8 @@ class ProctorioConfigTest extends TestCase
         $this->assertEquals($result[ProctorioConfig::EXAM_START], self::EXAM_START_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::EXAM_TAKE], self::EXAM_TAKE_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::EXAM_END], self::EXAM_END_CUSTOM_VALUE);
-        $this->assertEquals($result[ProctorioConfig::EXAM_SETTINGS], self::EXAM_SETTINGS_CUSTOM_VALUE);
+        $this->assertIsString($result[ProctorioConfig::EXAM_SETTINGS]);
+        $this->assertEquals($result[ProctorioConfig::EXAM_SETTINGS], self::EXAM_SETTINGS_EXPECTED_VALUE);
         $this->assertEquals($result[ProctorioConfig::FULL_NAME], self::FULL_NAME_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::EXAM_TAG], self::EXAM_TAG_CUSTOM_VALUE);
         $this->assertEquals($result[ProctorioConfig::OAUTH_SIGNATURE_METHOD], self::OAUTH_SIGNATURE_METHOD_CUSTOM_VALUE);
@@ -88,7 +92,7 @@ class ProctorioConfigTest extends TestCase
         $this->assertEquals($result[ProctorioConfig::OAUTH_NONCE], self::OAUTH_NONCE_CUSTOM_VALUE);
     }
 
-    public function testConfigureArrayWhenTagEmpty()
+    public function testConfigureArrayWhenTagEmpty(): void
     {
         $params = $this->getCustomParameters();
         unset($params[ProctorioConfig::FULL_NAME]);
@@ -111,13 +115,13 @@ class ProctorioConfigTest extends TestCase
         $this->assertEquals(ProctorioConfig::DEFAULT_OAUTH_VERSION, $result[ProctorioConfig::OAUTH_VERSION]);
     }
 
-    public function testConfigureReturnArrayInRightOrder()
+    public function testConfigureReturnArrayInRightOrder(): void
     {
         $result = $this->subject->configure($this->getCustomParameters(), self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
         $this->assertSame($this->getRequiredOrder(), array_keys($result));
     }
 
-    private function getRequiredOrder()
+    private function getRequiredOrder(): array
     {
         return [
             0 => 'launch_url',
