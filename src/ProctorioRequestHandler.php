@@ -42,11 +42,7 @@ class ProctorioRequestHandler
     public function __construct(string $url, ClientInterface $httpClient = null)
     {
         $this->url = $url;
-        $this->httpClient = $httpClient;
-
-        if ($this->httpClient === null) {
-            $this->httpClient = new Client();
-        }
+        $this->httpClient = $httpClient ?? new Client();
     }
 
     /**

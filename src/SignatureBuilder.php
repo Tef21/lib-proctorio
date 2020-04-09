@@ -32,15 +32,8 @@ class SignatureBuilder
 
     public function __construct(Encoder $encoder = null, Normalizer $normalizer = null)
     {
-        $this->encoder = $encoder;
-        $this->normalizer = $normalizer;
-
-        if ($this->encoder === null) {
-            $this->encoder = new Encoder();
-        }
-        if ($this->normalizer === null) {
-            $this->normalizer = new Normalizer();
-        }
+        $this->encoder = $encoder ?? new Encoder();
+        $this->normalizer = $normalizer ?? new Normalizer();
     }
 
 
