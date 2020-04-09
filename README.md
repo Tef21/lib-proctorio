@@ -61,7 +61,7 @@ $params = [
     ProctorioConfig::USER_ID => 'user_id',
     ProctorioConfig::EXAM_TAKE => 'https:\/\/tao.platform.instance\/.*',
     ProctorioConfig::EXAM_END => 'https:\/\/tao.platform.instance\/.*',
-    ProctorioConfig::EXAM_SETTINGS => 'webtraffic',
+    ProctorioConfig::EXAM_SETTINGS => ['webtraffic']
 ];
 
 $urls = $proctorioService->callRemoteProctoring($params, 'your_oauth_key', 'secret');
