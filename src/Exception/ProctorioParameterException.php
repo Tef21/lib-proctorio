@@ -15,24 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
  */
 
 declare(strict_types=1);
 
-namespace oat\Proctorio;
+namespace oat\Proctorio\Exception;
 
-class Normalizer
+use Exception;
+
+class ProctorioParameterException extends Exception
 {
-    public function normalize(array $params): string
-    {
-        $result = [];
-        foreach ($params as $key => $value) {
-            $result[] = rawurlencode(urldecode($key))
-                . '='
-                . rawurlencode(urldecode($value));
-        }
-
-        return implode('&', $result);
-    }
 }

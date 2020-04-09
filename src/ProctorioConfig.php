@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * This program is free software; you can redistribute it and/or
@@ -18,8 +18,12 @@
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+declare(strict_types=1);
+
 namespace oat\Proctorio;
 
+use Exception;
+use oat\Proctorio\Exception\ProctorioParameterException;
 use Ramsey\Uuid\Uuid;
 
 class ProctorioConfig
@@ -41,34 +45,81 @@ class ProctorioConfig
     public const OAUTH_NONCE = 'oauth_nonce';
     public const HMAC_SHA_1 = 'HMAC-SHA1';
     public const DEFAULT_OAUTH_VERSION = '1.0';
-    public const POST_MANHOOD = 'POST';
 
-    public function configure(array $parameters): array
+    private const MANDATORY_FIELD = 'mandatory';
+
+    /**
+     * Proctorio require array in specific order
+     * Each parameter may have default value
+     * Default value will be set when no field param provided
+     * When parameter is not set and
+     * it doesn't have default value and is not mandatory
+     * it will be omitted
+     *
+     * @throws ProctorioParameterException
+     * @throws Exception
+     */
+    private function getProctorioOrderedParams(): array
     {
         return [
-            self::LAUNCH_URL => $this->getDefaultValue($parameters, self::LAUNCH_URL, self::getProctorioDefaultUrl()),
-            self::USER_ID => $this->getDefaultValue($parameters, self::USER_ID),
-            self::OAUTH_CONSUMER_KEY => $this->getDefaultValue($parameters, self::OAUTH_CONSUMER_KEY),
-            self::EXAM_START => $this->getDefaultValue($parameters, self::EXAM_START),
-            self::EXAM_TAKE => $this->getDefaultValue($parameters, self::EXAM_TAKE),
-            self::EXAM_END => $this->getDefaultValue($parameters, self::EXAM_END),
-            self::EXAM_SETTINGS => $this->getDefaultValue($parameters, self::EXAM_SETTINGS),
-            self::FULL_NAME => $this->getDefaultValue($parameters, self::FULL_NAME),
-            self::EXAM_TAG => $this->getDefaultValue($parameters, self::EXAM_TAG),
-            self::OAUTH_SIGNATURE_METHOD => $this->getDefaultValue($parameters, self::OAUTH_SIGNATURE_METHOD, self::HMAC_SHA_1),
-            self::OAUTH_VERSION => $this->getDefaultValue($parameters, self::OAUTH_VERSION, self::DEFAULT_OAUTH_VERSION),
-            self::OAUTH_TIMESTAMP => $this->getDefaultValue($parameters, self::OAUTH_TIMESTAMP),
-            self::OAUTH_NONCE => $this->getDefaultValue($parameters, self::OAUTH_NONCE),
+            self::LAUNCH_URL => self::MANDATORY_FIELD,
+            self::USER_ID => self::MANDATORY_FIELD,
+            self::OAUTH_CONSUMER_KEY => self::MANDATORY_FIELD,
+            self::EXAM_START => self::MANDATORY_FIELD,
+            self::EXAM_TAKE => self::MANDATORY_FIELD,
+            self::EXAM_END => self::MANDATORY_FIELD,
+            self::EXAM_SETTINGS => self::MANDATORY_FIELD,
+            self::EXAM_TAG => null,
+            self::FULL_NAME => null,
+            self::OAUTH_SIGNATURE_METHOD => self::HMAC_SHA_1,
+            self::OAUTH_VERSION => self::DEFAULT_OAUTH_VERSION,
+            self::OAUTH_TIMESTAMP => (string) time(),
+            self::OAUTH_NONCE => Uuid::uuid4()->toString(),
         ];
     }
 
-    private function getDefaultValue(array $parameters, string $field, string $default = ''): string
+    /**
+     * @throws ProctorioParameterException
+     */
+    private function createOrderedParamteres(array $parameters): array
     {
-        return $parameters[$field] ?? $default;
+        $proctorioParameters = [];
+        foreach ($this->getProctorioOrderedParams() as $paramName => $default) {
+            if ($default === self::MANDATORY_FIELD && !isset($parameters[$paramName])) {
+                throw new ProctorioParameterException(
+                    sprintf('Mandatory field %s missing', $paramName)
+                );
+            }
+
+            if ($paramName === ProctorioConfig::EXAM_SETTINGS) {
+                if (!is_array($parameters[$paramName])) {
+                    throw new ProctorioParameterException('exam_settings has to be array');
+                }
+
+                $proctorioParameters[$paramName] = implode(',', array_map('trim', $parameters[$paramName]));
+                continue;
+            }
+
+            if (isset($parameters[$paramName])) {
+                $proctorioParameters[$paramName] = $parameters[$paramName];
+                continue;
+            }
+
+            if ($default !== null) {
+                $proctorioParameters[$paramName] = $default;
+            }
+        }
+
+        return $proctorioParameters;
     }
 
-    public static function getProctorioDefaultUrl(): string
+    /**
+     * @return string[]
+     * @throws ProctorioParameterException
+     */
+    public function configure(array $parameters, string $key): array
     {
-        return sprintf(self::PROCTORIO_URL, self::CURRENT_DEFAULT_REGION);
+        $parameters[self::OAUTH_CONSUMER_KEY] = $key;
+        return $this->createOrderedParamteres($parameters);
     }
 }
