@@ -171,6 +171,5 @@ class ProctorioConfigTest extends TestCase
         $params[ProctorioConfig::EXAM_SETTINGS] = 'string';
         $this->expectException(ProctorioParameterException::class);
         $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
-
     }
 }
