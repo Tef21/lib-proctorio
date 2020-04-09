@@ -45,7 +45,6 @@ class ProctorioConfig
     public const OAUTH_NONCE = 'oauth_nonce';
     public const HMAC_SHA_1 = 'HMAC-SHA1';
     public const DEFAULT_OAUTH_VERSION = '1.0';
-    public const POST_METHOD = 'POST';
 
     private const MANDATORY_FIELD = 'mandatory';
 

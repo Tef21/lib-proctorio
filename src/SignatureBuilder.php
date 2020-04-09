@@ -24,6 +24,8 @@ namespace oat\Proctorio;
 
 class SignatureBuilder
 {
+    public const POST_METHOD = 'POST';
+
     /** @var Encoder */
     private $encoder;
 
@@ -47,7 +49,7 @@ class SignatureBuilder
 
     private function buildSignatureBaseString(array $payload): string
     {
-        return ProctorioConfig::POST_METHOD . '&'
+        return self::POST_METHOD . '&'
             . $this->encoder->encode($payload[ProctorioConfig::LAUNCH_URL])
             . '&' . $this->encoder->encode($this->normalizer->normalize($payload));
     }
