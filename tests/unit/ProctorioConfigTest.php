@@ -166,6 +166,22 @@ class ProctorioConfigTest extends TestCase
         $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
     }
 
+    public function testConfigureWithMissingOptionalParameters()
+    {
+        $params = $this->getCustomParameters();
+        unset($params[ProctorioConfig::FULL_NAME]);
+        $result = $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
+        $this->assertArrayNotHasKey(ProctorioConfig::FULL_NAME, $result);
+    }
+
+    public function testConfigureWithMissingEmptyOptionalParameters()
+    {
+        $params = $this->getCustomParameters();
+        $params[ProctorioConfig::FULL_NAME] = '';
+        $result = $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
+        $this->assertArrayNotHasKey(ProctorioConfig::FULL_NAME, $result);
+    }
+
     public function testConfigureWithExamSettingsAsString()
     {
         $params = $this->getCustomParameters();
