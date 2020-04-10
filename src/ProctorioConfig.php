@@ -85,7 +85,7 @@ class ProctorioConfig
     {
         $proctorioParameters = [];
         foreach ($this->getProctorioOrderedParams() as $paramName => $default) {
-            if ($default === self::MANDATORY_FIELD && !isset($parameters[$paramName])) {
+            if ($default === self::MANDATORY_FIELD && empty($parameters[$paramName])) {
                 throw new ProctorioParameterException(
                     sprintf('Mandatory field %s missing', $paramName)
                 );
@@ -100,7 +100,7 @@ class ProctorioConfig
                 continue;
             }
 
-            if (isset($parameters[$paramName])) {
+            if (!empty($parameters[$paramName])) {
                 $proctorioParameters[$paramName] = $parameters[$paramName];
                 continue;
             }
