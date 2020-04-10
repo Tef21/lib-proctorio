@@ -36,7 +36,10 @@ class ProctorioConfigTest extends TestCase
     private const EXAM_END_CUSTOM_VALUE = 'exam_end_custom';
     private const EXAM_SETTINGS_CUSTOM_ELEMENT = 'exam_settings_custom';
     private const EXAM_SETTINGS_CUSTOM_ELEMENT_2 = 'exam_settings_custom_2';
-    private const EXAM_SETTINGS_CUSTOM_VALUE = [self::EXAM_SETTINGS_CUSTOM_ELEMENT, self::EXAM_SETTINGS_CUSTOM_ELEMENT_2];
+    private const EXAM_SETTINGS_CUSTOM_VALUE = [
+        self::EXAM_SETTINGS_CUSTOM_ELEMENT,
+        self::EXAM_SETTINGS_CUSTOM_ELEMENT_2
+    ];
     private const EXAM_SETTINGS_EXPECTED_VALUE = 'exam_settings_custom,exam_settings_custom_2';
     private const FULL_NAME_CUSTOM_VALUE = 'full_name_custom';
     private const EXAM_TAG_CUSTOM_VALUE = 'exam_tag_custom';
@@ -51,24 +54,6 @@ class ProctorioConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->subject = new ProctorioConfig();
-    }
-
-    private function getCustomParameters(): array
-    {
-        return [
-            ProctorioConfig::LAUNCH_URL => self::LAUNCH_URL_CUSTOM_VALUE,
-            ProctorioConfig::USER_ID => self::USER_ID_CUSTOM_VALUE,
-            ProctorioConfig::EXAM_START => self::EXAM_START_CUSTOM_VALUE,
-            ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
-            ProctorioConfig::EXAM_END => self::EXAM_END_CUSTOM_VALUE,
-            ProctorioConfig::EXAM_SETTINGS => self::EXAM_SETTINGS_CUSTOM_VALUE,
-            ProctorioConfig::FULL_NAME => self::FULL_NAME_CUSTOM_VALUE,
-            ProctorioConfig::EXAM_TAG => self::EXAM_TAG_CUSTOM_VALUE,
-            ProctorioConfig::OAUTH_SIGNATURE_METHOD => self::OAUTH_SIGNATURE_METHOD_CUSTOM_VALUE,
-            ProctorioConfig::OAUTH_VERSION => self::OAUTH_VERSION_CUSTOM_VALUE,
-            ProctorioConfig::OAUTH_TIMESTAMP => self::OAUTH_TIMESTAMP_CUSTOM_VALUE,
-            ProctorioConfig::OAUTH_NONCE => self::OAUTH_NONCE_CUSTOM_VALUE,
-        ];
     }
 
     public function testConfigureCustomValues(): void
@@ -122,42 +107,6 @@ class ProctorioConfigTest extends TestCase
         $this->assertSame($this->getRequiredOrder(), array_keys($result));
     }
 
-    private function getRequiredOrder(): array
-    {
-        return [
-            0 => 'launch_url',
-            1 => 'user_id',
-            2 => 'oauth_consumer_key',
-            3 => 'exam_start',
-            4 => 'exam_take',
-            5 => 'exam_end',
-            6 => 'exam_settings',
-            7 => 'exam_tag',
-            8 => 'fullname',
-            9 => 'oauth_signature_method',
-            10 => 'oauth_version',
-            11 => 'oauth_timestamp',
-            12 => 'oauth_nonce',
-        ];
-    }
-
-    private function checkIfAllKeysArePresent(array $result): void
-    {
-        $this->assertArrayHasKey(ProctorioConfig::LAUNCH_URL, $result);
-        $this->assertArrayHasKey(ProctorioConfig::USER_ID, $result);
-        $this->assertArrayHasKey(ProctorioConfig::OAUTH_CONSUMER_KEY, $result);
-        $this->assertArrayHasKey(ProctorioConfig::EXAM_START, $result);
-        $this->assertArrayHasKey(ProctorioConfig::EXAM_TAKE, $result);
-        $this->assertArrayHasKey(ProctorioConfig::EXAM_END, $result);
-        $this->assertArrayHasKey(ProctorioConfig::EXAM_SETTINGS, $result);
-        $this->assertArrayHasKey(ProctorioConfig::FULL_NAME, $result);
-        $this->assertArrayHasKey(ProctorioConfig::EXAM_TAG, $result);
-        $this->assertArrayHasKey(ProctorioConfig::OAUTH_SIGNATURE_METHOD, $result);
-        $this->assertArrayHasKey(ProctorioConfig::OAUTH_VERSION, $result);
-        $this->assertArrayHasKey(ProctorioConfig::OAUTH_TIMESTAMP, $result);
-        $this->assertArrayHasKey(ProctorioConfig::OAUTH_NONCE, $result);
-    }
-
     public function testConfigureWithMissingParameters()
     {
         $params = $this->getCustomParameters();
@@ -180,5 +129,59 @@ class ProctorioConfigTest extends TestCase
         $params[ProctorioConfig::EXAM_SETTINGS] = ['elem ', ' elem'];
         $result = $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
         $this->assertSame('elem,elem', $result[ProctorioConfig::EXAM_SETTINGS]);
+    }
+
+    private function getCustomParameters(): array
+    {
+        return [
+            ProctorioConfig::LAUNCH_URL => self::LAUNCH_URL_CUSTOM_VALUE,
+            ProctorioConfig::USER_ID => self::USER_ID_CUSTOM_VALUE,
+            ProctorioConfig::EXAM_START => self::EXAM_START_CUSTOM_VALUE,
+            ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
+            ProctorioConfig::EXAM_END => self::EXAM_END_CUSTOM_VALUE,
+            ProctorioConfig::EXAM_SETTINGS => self::EXAM_SETTINGS_CUSTOM_VALUE,
+            ProctorioConfig::FULL_NAME => self::FULL_NAME_CUSTOM_VALUE,
+            ProctorioConfig::EXAM_TAG => self::EXAM_TAG_CUSTOM_VALUE,
+            ProctorioConfig::OAUTH_SIGNATURE_METHOD => self::OAUTH_SIGNATURE_METHOD_CUSTOM_VALUE,
+            ProctorioConfig::OAUTH_VERSION => self::OAUTH_VERSION_CUSTOM_VALUE,
+            ProctorioConfig::OAUTH_TIMESTAMP => self::OAUTH_TIMESTAMP_CUSTOM_VALUE,
+            ProctorioConfig::OAUTH_NONCE => self::OAUTH_NONCE_CUSTOM_VALUE,
+        ];
+    }
+
+    private function checkIfAllKeysArePresent(array $result): void
+    {
+        $this->assertArrayHasKey(ProctorioConfig::LAUNCH_URL, $result);
+        $this->assertArrayHasKey(ProctorioConfig::USER_ID, $result);
+        $this->assertArrayHasKey(ProctorioConfig::OAUTH_CONSUMER_KEY, $result);
+        $this->assertArrayHasKey(ProctorioConfig::EXAM_START, $result);
+        $this->assertArrayHasKey(ProctorioConfig::EXAM_TAKE, $result);
+        $this->assertArrayHasKey(ProctorioConfig::EXAM_END, $result);
+        $this->assertArrayHasKey(ProctorioConfig::EXAM_SETTINGS, $result);
+        $this->assertArrayHasKey(ProctorioConfig::FULL_NAME, $result);
+        $this->assertArrayHasKey(ProctorioConfig::EXAM_TAG, $result);
+        $this->assertArrayHasKey(ProctorioConfig::OAUTH_SIGNATURE_METHOD, $result);
+        $this->assertArrayHasKey(ProctorioConfig::OAUTH_VERSION, $result);
+        $this->assertArrayHasKey(ProctorioConfig::OAUTH_TIMESTAMP, $result);
+        $this->assertArrayHasKey(ProctorioConfig::OAUTH_NONCE, $result);
+    }
+
+    private function getRequiredOrder(): array
+    {
+        return [
+            0 => 'launch_url',
+            1 => 'user_id',
+            2 => 'oauth_consumer_key',
+            3 => 'exam_start',
+            4 => 'exam_take',
+            5 => 'exam_end',
+            6 => 'exam_settings',
+            7 => 'exam_tag',
+            8 => 'fullname',
+            9 => 'oauth_signature_method',
+            10 => 'oauth_version',
+            11 => 'oauth_timestamp',
+            12 => 'oauth_nonce',
+        ];
     }
 }
