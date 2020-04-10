@@ -46,7 +46,7 @@ class SignatureBuilderTest extends TestCase
         $this->normalizerMock = $this->createMock(Normalizer::class);
         $this->encoderMock = $this->createMock(Encoder::class);
         $this->normalizerMock = $this->createMock(Normalizer::class);
-        $this->subject = new SignatureBuilder($this->encoderMock, $this->normalizerMock);
+        $this->subject = new SignatureBuilder('urlEndpoint', $this->encoderMock, $this->normalizerMock);
     }
 
     public function testBuildSignature(): void
