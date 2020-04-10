@@ -32,8 +32,12 @@ class SignatureBuilder
     /** @var Normalizer */
     private $normalizer;
 
-    public function __construct(Encoder $encoder = null, Normalizer $normalizer = null)
+    /** @var string */
+    private $endpointUrl;
+
+    public function __construct(string $endpointUrl, Encoder $encoder = null, Normalizer $normalizer = null)
     {
+        $this->endpointUrl = $endpointUrl;
         $this->encoder = $encoder ?? new Encoder();
         $this->normalizer = $normalizer ?? new Normalizer();
     }
@@ -50,7 +54,7 @@ class SignatureBuilder
     private function buildSignatureBaseString(array $payload): string
     {
         return self::POST_METHOD . '&'
-            . $this->encoder->encode($payload[ProctorioConfig::LAUNCH_URL])
+            . $this->encoder->encode($this->endpointUrl)
             . '&' . $this->encoder->encode($this->normalizer->normalize($payload));
     }
 }
