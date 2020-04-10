@@ -38,7 +38,7 @@ class ProctorioAccessProvider
     public function __construct(ProctorioRequestHandler $requestHandler = null, SignatureBuilder $signatureBuilder = null)
     {
         $this->requestHandler = $requestHandler ?? new ProctorioRequestHandler(
-                sprintf(ProctorioConfig::LAUNCH_URL, ProctorioConfig::CURRENT_DEFAULT_REGION)
+                sprintf(ProctorioConfig::PROCTORIO_URL, ProctorioConfig::CURRENT_DEFAULT_REGION)
             );
         $this->signatureBuilder = $signatureBuilder ?? new SignatureBuilder();
     }
