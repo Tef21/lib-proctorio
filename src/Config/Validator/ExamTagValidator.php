@@ -20,15 +20,23 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\Config;
+namespace oat\Proctorio\Config\Validator;
 
-class OauthTimestampValidator implements Validator
+use oat\Proctorio\Exception\ProctorioParameterException;
+
+class ExamTagValidator implements ValidatorInterface
 {
     /**
      * @inheritDoc
      */
-    public function validate($configName, $value)
+    public function validate(string $configName, $value)
     {
-        return $value ?? (string)time();
+        if (!empty($value) && (!is_string($value) || strlen($value) > 100)) {
+            throw new ProctorioParameterException(
+                sprintf('%s is a required string with max 100 characters', $configName)
+            );
+        }
+
+        return $value;
     }
 }

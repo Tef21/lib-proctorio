@@ -20,17 +20,21 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\Config;
+namespace oat\Proctorio\Config\Validator;
 
-use oat\Proctorio\ProctorioConfig;
+use oat\Proctorio\Exception\ProctorioParameterException;
 
-class OauthVersionValidator implements Validator
+class ExamUrlValidator implements ValidatorInterface
 {
     /**
      * @inheritDoc
      */
     public function validate(string $configName, $value)
     {
-        return $value ?? ProctorioConfig::DEFAULT_OAUTH_VERSION;
+        if (empty($value) || !is_string($value)) {
+            throw new ProctorioParameterException(sprintf('%s is required', $configName));
+        }
+
+        return $value;
     }
 }

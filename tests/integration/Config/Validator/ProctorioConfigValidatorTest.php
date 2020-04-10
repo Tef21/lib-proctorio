@@ -20,9 +20,9 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\tests\integration;
+namespace oat\Proctorio\tests\integration\Config\Validator;
 
-use oat\Proctorio\Config\ProctorioConfigValidator;
+use oat\Proctorio\Config\Validator\ProctorioConfigValidator;
 use oat\Proctorio\Exception\ProctorioParameterException;
 use oat\Proctorio\ProctorioConfig;
 use PHPUnit\Framework\TestCase;
@@ -34,18 +34,17 @@ class ProctorioConfigValidatorTest extends TestCase
     private const EXAM_START_CUSTOM_VALUE = 'exam_start_custom';
     private const EXAM_TAKE_CUSTOM_VALUE = 'exam_take_custom';
     private const EXAM_END_CUSTOM_VALUE = 'exam_end_custom';
-    private const EXAM_SETTINGS_CUSTOM_ELEMENT = 'exam_settings_custom';
-    private const EXAM_SETTINGS_CUSTOM_ELEMENT_2 = 'exam_settings_custom_2';
+    private const EXAM_SETTINGS_CUSTOM_ELEMENT = 'recordaudio';
+    private const EXAM_SETTINGS_CUSTOM_ELEMENT_2 = 'recordvideo';
     private const EXAM_SETTINGS_CUSTOM_VALUE = [
         self::EXAM_SETTINGS_CUSTOM_ELEMENT,
         self::EXAM_SETTINGS_CUSTOM_ELEMENT_2
     ];
-
     private const FULL_NAME_CUSTOM_VALUE = 'full_name_custom';
     private const EXAM_TAG_CUSTOM_VALUE = 'exam_tag_custom';
-    private const OAUTH_SIGNATURE_METHOD_CUSTOM_VALUE = 'oauth_signature_method_custom';
-    private const OAUTH_VERSION_CUSTOM_VALUE = 'oauth_version_custom';
-    private const OAUTH_TIMESTAMP_CUSTOM_VALUE = 'oauth_timestamp_custom';
+    private const OAUTH_SIGNATURE_METHOD_CUSTOM_VALUE = ProctorioConfig::HMAC_SHA_1;
+    private const OAUTH_VERSION_CUSTOM_VALUE = ProctorioConfig::DEFAULT_OAUTH_VERSION;
+    private const OAUTH_TIMESTAMP_CUSTOM_VALUE = '1586522809';
     private const OAUTH_NONCE_CUSTOM_VALUE = 'oauth_nonce_custom';
 
     private const DEFAULT_VALUES = [
@@ -110,9 +109,14 @@ class ProctorioConfigValidatorTest extends TestCase
                 str_repeat('-', 501),
             ],
             [
-                'user_id is required',
+                'user_id is a required string with max 36 characters',
                 ProctorioConfig::USER_ID,
                 null,
+            ],
+            [
+                'user_id is a required string with max 36 characters',
+                ProctorioConfig::USER_ID,
+                str_repeat('-', 37),
             ],
             [
                 'exam_start is required',
@@ -134,34 +138,48 @@ class ProctorioConfigValidatorTest extends TestCase
                 ProctorioConfig::EXAM_SETTINGS,
                 'it should be an array',
             ],
-            /*
-            @TODO Validate missing fields
             [
-                '...',
-                ProctorioConfig::FULL_NAME,
-                null,
+                'has to be array with valid settings',
+                ProctorioConfig::EXAM_SETTINGS,
+                [
+                    'not_allowed'
+                ],
             ],
             [
-                '...',
-                ProctorioConfig::EXAM_TAG,
-                null,
+                'oauth_consumer_key is a required string with max 32 characters',
+                ProctorioConfig::OAUTH_CONSUMER_KEY,
+                str_repeat('-', 33),
             ],
             [
-                '...',
+                'oauth_signature_method supports only HMAC-SHA1',
+                ProctorioConfig::OAUTH_SIGNATURE_METHOD,
+                'HMAC-SHA2',
+            ],
+            [
+                'oauth_version must be 1.0',
                 ProctorioConfig::OAUTH_VERSION,
-                null,
+                '3.0',
             ],
             [
-                '...',
+                'oauth_timestamp must be numeric',
                 ProctorioConfig::OAUTH_TIMESTAMP,
-                null,
+                'abc',
             ],
             [
-                '...',
+                'oauth_nonce is required',
                 ProctorioConfig::OAUTH_NONCE,
-                null,
+                '',
             ],
-            */
+            [
+                'fullname is a required string with max 100 characters',
+                ProctorioConfig::FULL_NAME,
+                str_repeat('-', 101),
+            ],
+            [
+                'exam_tag is a required string with max 100 characters',
+                ProctorioConfig::EXAM_TAG,
+                str_repeat('-', 101),
+            ],
         ];
     }
 

@@ -20,21 +20,27 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\Config;
+namespace oat\Proctorio\Config\Validator;
 
 use oat\Proctorio\Exception\ProctorioParameterException;
 
-class ExamSettingsValidator implements Validator
+class LaunchUrlValidator implements ValidatorInterface
 {
     /**
      * @inheritDoc
      */
     public function validate(string $configName, $value)
     {
-        if (!is_array($value)) {
-            throw new ProctorioParameterException(sprintf('%s has to be array', $configName));
+        if (empty($value) || !is_string($value) || strlen((string)$value) > 500) {
+            throw new ProctorioParameterException(
+                sprintf(
+                    '%s must be a required string with max 500 characters. "%s" provided',
+                    $configName,
+                    $value
+                )
+            );
         }
 
-        return implode(',', array_map('trim', $value));
+        return $value;
     }
 }

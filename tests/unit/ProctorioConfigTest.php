@@ -34,18 +34,18 @@ class ProctorioConfigTest extends TestCase
     private const EXAM_START_CUSTOM_VALUE = 'exam_start_custom';
     private const EXAM_TAKE_CUSTOM_VALUE = 'exam_take_custom';
     private const EXAM_END_CUSTOM_VALUE = 'exam_end_custom';
-    private const EXAM_SETTINGS_CUSTOM_ELEMENT = 'exam_settings_custom';
-    private const EXAM_SETTINGS_CUSTOM_ELEMENT_2 = 'exam_settings_custom_2';
+    private const EXAM_SETTINGS_CUSTOM_ELEMENT = 'recordaudio';
+    private const EXAM_SETTINGS_CUSTOM_ELEMENT_2 = 'recordvideo';
     private const EXAM_SETTINGS_CUSTOM_VALUE = [
         self::EXAM_SETTINGS_CUSTOM_ELEMENT,
         self::EXAM_SETTINGS_CUSTOM_ELEMENT_2
     ];
-    private const EXAM_SETTINGS_EXPECTED_VALUE = 'exam_settings_custom,exam_settings_custom_2';
+    private const EXAM_SETTINGS_EXPECTED_VALUE = 'recordaudio,recordvideo';
     private const FULL_NAME_CUSTOM_VALUE = 'full_name_custom';
     private const EXAM_TAG_CUSTOM_VALUE = 'exam_tag_custom';
-    private const OAUTH_SIGNATURE_METHOD_CUSTOM_VALUE = 'oauth_signature_method_custom';
-    private const OAUTH_VERSION_CUSTOM_VALUE = 'oauth_version_custom';
-    private const OAUTH_TIMESTAMP_CUSTOM_VALUE = 'oauth_timestamp_custom';
+    private const OAUTH_SIGNATURE_METHOD_CUSTOM_VALUE = 'HMAC-SHA1';
+    private const OAUTH_VERSION_CUSTOM_VALUE = '1.0';
+    private const OAUTH_TIMESTAMP_CUSTOM_VALUE = '1586522823';
     private const OAUTH_NONCE_CUSTOM_VALUE = 'oauth_nonce_custom';
 
     /** @var ProctorioConfig */
@@ -142,9 +142,12 @@ class ProctorioConfigTest extends TestCase
     public function testConfigureWithExamSettingsWithIllegalStrings()
     {
         $params = $this->getCustomParameters();
-        $params[ProctorioConfig::EXAM_SETTINGS] = ['elem ', ' elem'];
+        $params[ProctorioConfig::EXAM_SETTINGS] = [
+            self::EXAM_SETTINGS_CUSTOM_ELEMENT,
+            self::EXAM_SETTINGS_CUSTOM_ELEMENT_2
+        ];
         $result = $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
-        $this->assertSame('elem,elem', $result[ProctorioConfig::EXAM_SETTINGS]);
+        $this->assertSame('recordaudio,recordvideo', $result[ProctorioConfig::EXAM_SETTINGS]);
     }
 
     private function getCustomParameters(): array

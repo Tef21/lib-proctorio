@@ -20,80 +20,80 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\Config;
+namespace oat\Proctorio\Config\Validator;
 
 use oat\Proctorio\Exception\ProctorioParameterException;
 use oat\Proctorio\ProctorioConfig;
 
-class ProctorioConfigValidator implements Validator
+class ProctorioConfigValidator implements ValidatorInterface
 {
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $examSettingsValidator;
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $examTagValidator;
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $examUrlValidator;
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $launchUrlValidator;
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $oauthConsumerKeyValidator;
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $oauthNonceValidator;
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $oauthSignatureMethodValidator;
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $oauthTimestampValidator;
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $oauthVersionValidator;
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $userFullNameValidator;
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $userIdValidator;
 
     public function __construct(
-        Validator $examSettingsValidator = null,
-        Validator $examTagValidator = null,
-        Validator $examUrlValidator = null,
-        Validator $launchUrlValidator = null,
-        Validator $oauthConsumerKeyValidator = null,
-        Validator $oauthNonceValidator = null,
-        Validator $oauthSignatureMethodValidator = null,
-        Validator $oauthTimestampValidator = null,
-        Validator $oauthVersionValidator = null,
-        Validator $userFullNameValidator = null,
-        Validator $userIdValidator = null
+        ValidatorInterface $examSettingsValidator = null,
+        ValidatorInterface $examTagValidator = null,
+        ValidatorInterface $examUrlValidator = null,
+        ValidatorInterface $launchUrlValidator = null,
+        ValidatorInterface $oauthConsumerKeyValidator = null,
+        ValidatorInterface $oauthNonceValidator = null,
+        ValidatorInterface $oauthSignatureMethodValidator = null,
+        ValidatorInterface $oauthTimestampValidator = null,
+        ValidatorInterface $oauthVersionValidator = null,
+        ValidatorInterface $userFullNameValidator = null,
+        ValidatorInterface $userIdValidator = null
     )
     {
         $this->examSettingsValidator = $examSettingsValidator ?? new ExamSettingsValidator();
@@ -118,7 +118,7 @@ class ProctorioConfigValidator implements Validator
         $allConfigs = [];
 
         foreach ($value as $configName => $configValue) {
-            /** @var Validator $validator */
+            /** @var ValidatorInterface $validator */
             $validator = $validators[$configName] ?? null;
 
             if ($validator === null) {

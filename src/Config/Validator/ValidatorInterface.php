@@ -20,11 +20,11 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\Config;
+namespace oat\Proctorio\Config\Validator;
 
 use oat\Proctorio\Exception\ProctorioParameterException;
 
-interface Validator
+interface ValidatorInterface
 {
     /**
      * @param string $configName

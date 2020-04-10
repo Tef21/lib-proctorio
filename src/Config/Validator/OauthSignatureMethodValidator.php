@@ -20,15 +20,30 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\Config;
+namespace oat\Proctorio\Config\Validator;
 
-class UserFullNameValidator implements Validator
+use oat\Proctorio\Exception\ProctorioParameterException;
+use oat\Proctorio\ProctorioConfig;
+
+class OauthSignatureMethodValidator implements ValidatorInterface
 {
     /**
      * @inheritDoc
      */
     public function validate(string $configName, $value)
     {
+        $value = $value ?? ProctorioConfig::HMAC_SHA_1;
+
+        if ($value !== ProctorioConfig::HMAC_SHA_1) {
+            throw new ProctorioParameterException(
+                sprintf(
+                    '%s supports only %s',
+                    $configName,
+                    ProctorioConfig::HMAC_SHA_1
+                )
+            );
+        }
+
         return $value;
     }
 }

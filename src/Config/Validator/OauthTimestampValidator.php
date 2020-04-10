@@ -20,19 +20,26 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\Config;
+namespace oat\Proctorio\Config\Validator;
 
 use oat\Proctorio\Exception\ProctorioParameterException;
 
-class ExamUrlValidator implements Validator
+class OauthTimestampValidator implements ValidatorInterface
 {
     /**
      * @inheritDoc
      */
     public function validate(string $configName, $value)
     {
-        if (empty($value)) {
-            throw new ProctorioParameterException(sprintf('%s is required', $configName));
+        $value = $value ?? (string)time();
+
+        if (!is_numeric($value)) {
+            throw new ProctorioParameterException(
+                sprintf(
+                    '%s must be numeric',
+                    $configName
+                )
+            );
         }
 
         return $value;

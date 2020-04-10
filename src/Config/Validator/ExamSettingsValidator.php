@@ -20,17 +20,27 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\Config;
+namespace oat\Proctorio\Config\Validator;
 
-use Ramsey\Uuid\Uuid;
+use oat\Proctorio\Exception\ProctorioParameterException;
+use oat\Proctorio\ProctorioConfig;
 
-class OauthNonceValidator implements Validator
+class ExamSettingsValidator implements ValidatorInterface
 {
     /**
      * @inheritDoc
      */
     public function validate(string $configName, $value)
     {
-        return $value ?? Uuid::uuid4()->toString();
+        if (!is_array($value) || array_intersect($value, ProctorioConfig::VALID_EXAM_SETTINGS) !== $value) {
+            throw new ProctorioParameterException(
+                sprintf(
+                    '%s has to be array with valid settings',
+                    $configName
+                )
+            );
+        }
+
+        return implode(',', array_map('trim', $value));
     }
 }

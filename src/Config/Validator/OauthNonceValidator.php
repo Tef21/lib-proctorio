@@ -20,23 +20,25 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\Config;
+namespace oat\Proctorio\Config\Validator;
 
 use oat\Proctorio\Exception\ProctorioParameterException;
+use Ramsey\Uuid\Uuid;
 
-class LaunchUrlValidator implements Validator
+class OauthNonceValidator implements ValidatorInterface
 {
     /**
      * @inheritDoc
      */
     public function validate(string $configName, $value)
     {
-        if (empty($value) || strlen((string)$value) > 500) {
+        $value = $value ?? Uuid::uuid4()->toString();
+
+        if (empty($value) || !is_string($value)) {
             throw new ProctorioParameterException(
                 sprintf(
-                    '%s must be a required string with max 500 characters. "%s" provided',
-                    $configName,
-                    $value
+                    '%s is required',
+                    $configName
                 )
             );
         }

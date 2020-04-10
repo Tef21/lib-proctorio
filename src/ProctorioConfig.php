@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace oat\Proctorio;
 
-use oat\Proctorio\Config\ProctorioConfigValidator;
-use oat\Proctorio\Config\Validator;
+use oat\Proctorio\Config\Validator\ProctorioConfigValidator;
+use oat\Proctorio\Config\Validator\ValidatorInterface;
 use oat\Proctorio\Exception\ProctorioParameterException;
 
 class ProctorioConfig
@@ -45,6 +45,36 @@ class ProctorioConfig
     public const OAUTH_NONCE = 'oauth_nonce';
     public const HMAC_SHA_1 = 'HMAC-SHA1';
     public const DEFAULT_OAUTH_VERSION = '1.0';
+    public const VALID_EXAM_SETTINGS = [
+        'recordvideo',
+        'recordaudio',
+        'recordscreen',
+        'recordwebtraffic',
+        'recordroomstart',
+        'verifyvideo',
+        'verifyaudio',
+        'verifydesktop',
+        'verifyidauto',
+        'verifyidlive',
+        'verifysignature',
+        'fullscreenlenient',
+        'fullscreenmoderate',
+        'fullscreensevere',
+        'clipboard',
+        'notabs',
+        'linksonly',
+        'closetabs',
+        'onescreen',
+        'print',
+        'downloads',
+        'cache',
+        'rightclick',
+        'noreentry',
+        'agentreentry',
+        'calculatorbasic',
+        'calculatorsci',
+        'whiteboard'
+    ];
     private const ORDERED_PARAMS = [
         self::LAUNCH_URL,
         self::USER_ID,
@@ -62,11 +92,11 @@ class ProctorioConfig
     ];
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $validator;
 
-    public function __construct(Validator $validator = null)
+    public function __construct(ValidatorInterface $validator = null)
     {
         $this->validator = $validator ?? new ProctorioConfigValidator();
     }

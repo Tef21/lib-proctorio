@@ -20,17 +20,23 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\Config;
+namespace oat\Proctorio\Config\Validator;
 
-use oat\Proctorio\ProctorioConfig;
+use oat\Proctorio\Exception\ProctorioParameterException;
 
-class OauthSignatureMethodValidator implements Validator
+class UserIdValidator implements ValidatorInterface
 {
     /**
      * @inheritDoc
      */
     public function validate(string $configName, $value)
     {
-        return $value ?? ProctorioConfig::HMAC_SHA_1;
+        if (empty($value) || !is_string($value) || strlen($value) > 36) {
+            throw new ProctorioParameterException(
+                sprintf('%s is a required string with max 36 characters', $configName)
+            );
+        }
+
+        return $value;
     }
 }

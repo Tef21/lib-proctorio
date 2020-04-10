@@ -20,19 +20,21 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio\Config;
+namespace oat\Proctorio\Config\Validator;
 
 use oat\Proctorio\Exception\ProctorioParameterException;
 
-class UserIdValidator implements Validator
+class OauthConsumerKeyValidator implements ValidatorInterface
 {
     /**
      * @inheritDoc
      */
     public function validate(string $configName, $value)
     {
-        if (empty($value)) {
-            throw new ProctorioParameterException(sprintf('%s is required', $configName));
+        if (empty($value) || !is_string($value) || strlen($value) > 32) {
+            throw new ProctorioParameterException(
+                sprintf('%s is a required string with max 32 characters', $configName)
+            );
         }
 
         return $value;
