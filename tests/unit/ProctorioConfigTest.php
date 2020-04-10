@@ -115,6 +115,22 @@ class ProctorioConfigTest extends TestCase
         $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
     }
 
+    public function testConfigureWithMissingOptionalParameters()
+    {
+        $params = $this->getCustomParameters();
+        unset($params[ProctorioConfig::FULL_NAME]);
+        $result = $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
+        $this->assertArrayNotHasKey(ProctorioConfig::FULL_NAME, $result);
+    }
+
+    public function testConfigureWithMissingEmptyOptionalParameters()
+    {
+        $params = $this->getCustomParameters();
+        $params[ProctorioConfig::FULL_NAME] = '';
+        $result = $this->subject->configure($params, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE);
+        $this->assertArrayNotHasKey(ProctorioConfig::FULL_NAME, $result);
+    }
+
     public function testConfigureWithExamSettingsAsString()
     {
         $params = $this->getCustomParameters();
@@ -176,8 +192,8 @@ class ProctorioConfigTest extends TestCase
             4 => 'exam_take',
             5 => 'exam_end',
             6 => 'exam_settings',
-            7 => 'exam_tag',
-            8 => 'fullname',
+            7 => 'fullname',
+            8 => 'exam_tag',
             9 => 'oauth_signature_method',
             10 => 'oauth_version',
             11 => 'oauth_timestamp',
