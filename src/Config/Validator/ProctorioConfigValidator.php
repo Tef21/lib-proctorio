@@ -27,66 +27,44 @@ use oat\Proctorio\ProctorioConfig;
 
 class ProctorioConfigValidator implements ValidatorInterface
 {
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var ValidatorInterface */
     private $examSettingsValidator;
 
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var ValidatorInterface */
     private $examTagValidator;
 
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var ValidatorInterface */
     private $examUrlValidator;
 
-    /**
-     * @var ValidatorInterface
-     */
-    private $launchUrlValidator;
+    /** @var ValidatorInterface */
+    private $examTakeUrlValidator;
 
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var ValidatorInterface */
     private $oauthConsumerKeyValidator;
 
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var ValidatorInterface */
     private $oauthNonceValidator;
 
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var ValidatorInterface */
     private $oauthSignatureMethodValidator;
 
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var ValidatorInterface */
     private $oauthTimestampValidator;
 
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var ValidatorInterface */
     private $oauthVersionValidator;
 
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var ValidatorInterface */
     private $userFullNameValidator;
 
-    /**
-     * @var ValidatorInterface
-     */
+    /** @var ValidatorInterface */
     private $userIdValidator;
 
     public function __construct(
         ValidatorInterface $examSettingsValidator = null,
         ValidatorInterface $examTagValidator = null,
         ValidatorInterface $examUrlValidator = null,
-        ValidatorInterface $launchUrlValidator = null,
+        ValidatorInterface $examTakeUrlValidator = null,
         ValidatorInterface $oauthConsumerKeyValidator = null,
         ValidatorInterface $oauthNonceValidator = null,
         ValidatorInterface $oauthSignatureMethodValidator = null,
@@ -94,12 +72,11 @@ class ProctorioConfigValidator implements ValidatorInterface
         ValidatorInterface $oauthVersionValidator = null,
         ValidatorInterface $userFullNameValidator = null,
         ValidatorInterface $userIdValidator = null
-    )
-    {
+    ) {
         $this->examSettingsValidator = $examSettingsValidator ?? new ExamSettingsValidator();
         $this->examTagValidator = $examTagValidator ?? new ExamTagValidator();
-        $this->examUrlValidator = $examUrlValidator ?? new ExamUrlValidator();
-        $this->launchUrlValidator = $launchUrlValidator ?? new LaunchUrlValidator();
+        $this->examUrlValidator = $examUrlValidator ?? new ExamUrlValidator(500);
+        $this->examTakeUrlValidator = $launchUrlValidator ?? new ExamUrlValidator(1000);
         $this->oauthConsumerKeyValidator = $oauthConsumerKeyValidator ?? new OauthConsumerKeyValidator();
         $this->oauthNonceValidator = $oauthNonceValidator ?? new OauthNonceValidator();
         $this->oauthSignatureMethodValidator = $oauthSignatureMethodValidator ?? new OauthSignatureMethodValidator();
@@ -112,10 +89,9 @@ class ProctorioConfigValidator implements ValidatorInterface
     /**
      * @inheritDoc
      */
-    public function validate(string $configName, $value)
+    public function validate($value): void
     {
         $validators = $this->getValidators();
-        $allConfigs = [];
 
         foreach ($value as $configName => $configValue) {
             /** @var ValidatorInterface $validator */
@@ -127,20 +103,28 @@ class ProctorioConfigValidator implements ValidatorInterface
                 );
             }
 
-            $allConfigs[$configName] = $validator->validate($configName, $configValue);
+            try {
+                $validator->validate($configValue);
+            } catch (ProctorioParameterException $exception) {
+                throw new ProctorioParameterException(
+                    sprintf(
+                        '%s: %s',
+                        $configName,
+                        $exception->getMessage()
+                    )
+                );
+            }
         }
-
-        return $allConfigs;
     }
 
     private function getValidators(): array
     {
         return [
-            ProctorioConfig::LAUNCH_URL => $this->launchUrlValidator,
+            ProctorioConfig::LAUNCH_URL => $this->examUrlValidator,
             ProctorioConfig::USER_ID => $this->userIdValidator,
             ProctorioConfig::OAUTH_CONSUMER_KEY => $this->oauthConsumerKeyValidator,
             ProctorioConfig::EXAM_START => $this->examUrlValidator,
-            ProctorioConfig::EXAM_TAKE => $this->examUrlValidator,
+            ProctorioConfig::EXAM_TAKE => $this->examTakeUrlValidator,
             ProctorioConfig::EXAM_END => $this->examUrlValidator,
             ProctorioConfig::EXAM_SETTINGS => $this->examSettingsValidator,
             ProctorioConfig::EXAM_TAG => $this->examTagValidator,

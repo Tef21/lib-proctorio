@@ -23,26 +23,16 @@ declare(strict_types=1);
 namespace oat\Proctorio\Config\Validator;
 
 use oat\Proctorio\Exception\ProctorioParameterException;
-use Ramsey\Uuid\Uuid;
 
 class OauthNonceValidator implements ValidatorInterface
 {
     /**
      * @inheritDoc
      */
-    public function validate(string $configName, $value)
+    public function validate($value): void
     {
-        $value = $value ?? Uuid::uuid4()->toString();
-
         if (empty($value) || !is_string($value)) {
-            throw new ProctorioParameterException(
-                sprintf(
-                    '%s is required',
-                    $configName
-                )
-            );
+            throw new ProctorioParameterException('parameter is a required string');
         }
-
-        return $value;
     }
 }

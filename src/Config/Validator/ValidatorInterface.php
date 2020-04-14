@@ -27,12 +27,9 @@ use oat\Proctorio\Exception\ProctorioParameterException;
 interface ValidatorInterface
 {
     /**
-     * @param string $configName
      * @param mixed $value
-     *
-     * @return mixed The configuration
      *
      * @throws ProctorioParameterException
      */
-    public function validate(string $configName, $value);
+    public function validate($value): void;
 }

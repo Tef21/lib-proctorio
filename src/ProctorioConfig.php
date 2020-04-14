@@ -25,6 +25,7 @@ namespace oat\Proctorio;
 use oat\Proctorio\Config\Validator\ProctorioConfigValidator;
 use oat\Proctorio\Config\Validator\ValidatorInterface;
 use oat\Proctorio\Exception\ProctorioParameterException;
+use Ramsey\Uuid\Uuid;
 
 class ProctorioConfig
 {
@@ -96,7 +97,7 @@ class ProctorioConfig
      */
     private $validator;
 
-    public function __construct(ValidatorInterface $validator = null)
+    public function __construct(ProctorioConfigValidator $validator = null)
     {
         $this->validator = $validator ?? new ProctorioConfigValidator();
     }
@@ -107,14 +108,49 @@ class ProctorioConfig
      */
     public function configure(array $parameters, string $key): array
     {
+        $parameters = $this->configDefaultParameters($parameters);
         $parameters[self::OAUTH_CONSUMER_KEY] = $key;
+        $parameters = $this->sortParameters($parameters);
 
+        $this->validator->validate($parameters);
+
+        return $this->prepareParametersValues($parameters);
+    }
+
+    private function prepareParametersValues(array $parameters): array
+    {
+        $parameters[self::EXAM_SETTINGS] = implode(
+            ',',
+            array_map(
+                'trim',
+                $parameters[self::EXAM_SETTINGS]
+            )
+        );
+
+        return array_filter($parameters);
+    }
+
+    private function sortParameters(array $parameters): array
+    {
         $orderedParameters = [];
 
         foreach (self::ORDERED_PARAMS as $key) {
             $orderedParameters[$key] = $parameters[$key] ?? null;
         }
 
-        return array_filter($this->validator->validate('all', $orderedParameters));
+        return $orderedParameters;
+    }
+
+    private function configDefaultParameters(array $parameters): array
+    {
+        return array_replace_recursive(
+            [
+                self::OAUTH_NONCE => Uuid::uuid4()->toString(),
+                self::OAUTH_SIGNATURE_METHOD => ProctorioConfig::HMAC_SHA_1,
+                self::OAUTH_TIMESTAMP => (string)time(),
+                self::OAUTH_VERSION => ProctorioConfig::DEFAULT_OAUTH_VERSION,
+            ],
+            array_filter($parameters)
+        );
     }
 }

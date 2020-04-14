@@ -26,15 +26,31 @@ use oat\Proctorio\Exception\ProctorioParameterException;
 
 class ExamUrlValidator implements ValidatorInterface
 {
+    /** @var int */
+    private $maxLength;
+
+    public function __construct(int $maxLength)
+    {
+        $this->maxLength = $maxLength;
+    }
+
     /**
      * @inheritDoc
      */
-    public function validate(string $configName, $value)
+    public function validate($value): void
     {
-        if (empty($value) || !is_string($value)) {
-            throw new ProctorioParameterException(sprintf('%s is required', $configName));
+        if (
+            empty($value)
+            || !is_string($value)
+            || (strpos($value, 'https://') !== 0 && strpos($value, 'https\:\/\/') !== 0)
+            || strlen($value) > $this->maxLength
+        ) {
+            throw new ProctorioParameterException(
+                sprintf(
+                    'parameter must contain a valid https url with max %s characters',
+                    $this->maxLength
+                )
+            );
         }
-
-        return $value;
     }
 }

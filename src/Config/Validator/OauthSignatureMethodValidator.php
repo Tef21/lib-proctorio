@@ -30,20 +30,15 @@ class OauthSignatureMethodValidator implements ValidatorInterface
     /**
      * @inheritDoc
      */
-    public function validate(string $configName, $value)
+    public function validate($value): void
     {
-        $value = $value ?? ProctorioConfig::HMAC_SHA_1;
-
         if ($value !== ProctorioConfig::HMAC_SHA_1) {
             throw new ProctorioParameterException(
                 sprintf(
-                    '%s supports only %s',
-                    $configName,
+                    'parameter supports only %s',
                     ProctorioConfig::HMAC_SHA_1
                 )
             );
         }
-
-        return $value;
     }
 }

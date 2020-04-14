@@ -23,26 +23,16 @@ declare(strict_types=1);
 namespace oat\Proctorio\Config\Validator;
 
 use oat\Proctorio\Exception\ProctorioParameterException;
-use oat\Proctorio\ProctorioConfig;
 
 class OauthVersionValidator implements ValidatorInterface
 {
     /**
      * @inheritDoc
      */
-    public function validate(string $configName, $value)
+    public function validate($value): void
     {
-        $value = $value ?? ProctorioConfig::DEFAULT_OAUTH_VERSION;
-
         if ($value !== '1.0') {
-            throw new ProctorioParameterException(
-                sprintf(
-                    '%s must be 1.0',
-                    $configName
-                )
-            );
+            throw new ProctorioParameterException('parameter must be 1.0');
         }
-
-        return $value;
     }
 }

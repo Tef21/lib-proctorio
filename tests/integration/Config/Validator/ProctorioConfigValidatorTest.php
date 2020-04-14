@@ -29,11 +29,11 @@ use PHPUnit\Framework\TestCase;
 
 class ProctorioConfigValidatorTest extends TestCase
 {
-    private const LAUNCH_URL_CUSTOM_VALUE = 'launch_url_custom';
+    private const LAUNCH_URL_CUSTOM_VALUE = 'https://launch_url_custom';
     private const USER_ID_CUSTOM_VALUE = 'user_id_custom';
-    private const EXAM_START_CUSTOM_VALUE = 'exam_start_custom';
-    private const EXAM_TAKE_CUSTOM_VALUE = 'exam_take_custom';
-    private const EXAM_END_CUSTOM_VALUE = 'exam_end_custom';
+    private const EXAM_START_CUSTOM_VALUE = 'https://exam_start_custom';
+    private const EXAM_TAKE_CUSTOM_VALUE = 'https://exam_take_custom';
+    private const EXAM_END_CUSTOM_VALUE = 'https://exam_end_custom';
     private const EXAM_SETTINGS_CUSTOM_ELEMENT = 'recordaudio';
     private const EXAM_SETTINGS_CUSTOM_ELEMENT_2 = 'recordvideo';
     private const EXAM_SETTINGS_CUSTOM_VALUE = [
@@ -85,7 +85,6 @@ class ProctorioConfigValidatorTest extends TestCase
         $this->expectExceptionMessage($expectedErrorMessage);
 
         $this->subject->validate(
-            'all',
             array_replace_recursive(
                 self::DEFAULT_VALUES,
                 [
@@ -99,133 +98,141 @@ class ProctorioConfigValidatorTest extends TestCase
     {
         return [
             [
-                'launch_url must be a required string with max 500 characters.',
+                'launch_url: parameter must contain a valid https url with max 500 characters',
                 ProctorioConfig::LAUNCH_URL,
                 null,
             ],
             [
-                'launch_url must be a required string with max 500 characters.',
+                'launch_url: parameter must contain a valid https url with max 500 characters',
                 ProctorioConfig::LAUNCH_URL,
-                str_repeat('-', 501),
+                'https://' . str_repeat('-', 493),
             ],
             [
-                'user_id is a required string with max 36 characters',
+                'launch_url: parameter must contain a valid https url with max 500 characters',
+                ProctorioConfig::LAUNCH_URL,
+                'http://',
+            ],
+            [
+                'launch_url: parameter must contain a valid https url with max 500 characters',
+                ProctorioConfig::LAUNCH_URL,
+                'http\:\/\/',
+            ],
+            [
+                'user_id: parameter is a required string with max 36 characters',
                 ProctorioConfig::USER_ID,
                 null,
             ],
             [
-                'user_id is a required string with max 36 characters',
+                'user_id: parameter is a required string with max 36 characters',
                 ProctorioConfig::USER_ID,
                 str_repeat('-', 37),
             ],
             [
-                'exam_start is required',
+                'exam_start: parameter must contain a valid https url',
                 ProctorioConfig::EXAM_START,
                 null,
             ],
             [
-                'exam_take is required',
+                'exam_start: parameter must contain a valid https url',
+                ProctorioConfig::EXAM_START,
+                'http://',
+            ],
+            [
+                'exam_start: parameter must contain a valid https url',
+                ProctorioConfig::EXAM_START,
+                'http\:\/\/',
+            ],
+            [
+                'exam_start: parameter must contain a valid https url',
+                ProctorioConfig::EXAM_START,
+                'https://' . str_repeat('-', 493),
+            ],
+            [
+                'exam_take: parameter must contain a valid https url with max 1000 characters',
                 ProctorioConfig::EXAM_TAKE,
                 null,
             ],
             [
-                'exam_end is required',
+                'exam_take: parameter must contain a valid https url with max 1000 characters',
+                ProctorioConfig::EXAM_TAKE,
+                'http://',
+            ],
+            [
+                'exam_take: parameter must contain a valid https url with max 1000 characters',
+                ProctorioConfig::EXAM_TAKE,
+                'http\:\/\/',
+            ],
+            [
+                'exam_take: parameter must contain a valid https url with max 1000 characters',
+                ProctorioConfig::EXAM_TAKE,
+                'https://' . str_repeat('-', 993),
+            ],
+            [
+                'exam_end: parameter must contain a valid https url with max 500 characters',
                 ProctorioConfig::EXAM_END,
                 null,
             ],
             [
-                'exam_settings has to be array',
+                'exam_end: parameter must contain a valid https url with max 500 characters',
+                ProctorioConfig::EXAM_END,
+                'http://',
+            ],
+            [
+                'exam_end: parameter must contain a valid https url with max 500 characters',
+                ProctorioConfig::EXAM_END,
+                'http\:\/\/',
+            ],
+            [
+                'exam_end: parameter must contain a valid https url with max 500 characters',
+                ProctorioConfig::EXAM_END,
+                'https://' . str_repeat('-', 493),
+            ],
+            [
+                'exam_settings: parameter has to be array',
                 ProctorioConfig::EXAM_SETTINGS,
                 'it should be an array',
             ],
             [
-                'has to be array with valid settings',
+                'exam_settings: parameter has to be array with valid settings',
                 ProctorioConfig::EXAM_SETTINGS,
                 [
                     'not_allowed'
                 ],
             ],
             [
-                'oauth_consumer_key is a required string with max 32 characters',
+                'oauth_consumer_key: parameter is a required string with max 32 characters',
                 ProctorioConfig::OAUTH_CONSUMER_KEY,
                 str_repeat('-', 33),
             ],
             [
-                'oauth_signature_method supports only HMAC-SHA1',
+                'oauth_signature_method: parameter supports only HMAC-SHA1',
                 ProctorioConfig::OAUTH_SIGNATURE_METHOD,
                 'HMAC-SHA2',
             ],
             [
-                'oauth_version must be 1.0',
+                'oauth_version: parameter must be 1.0',
                 ProctorioConfig::OAUTH_VERSION,
                 '3.0',
             ],
             [
-                'oauth_timestamp must be numeric',
+                'oauth_timestamp: parameter must be numeric',
                 ProctorioConfig::OAUTH_TIMESTAMP,
                 'abc',
             ],
             [
-                'oauth_nonce is required',
+                'oauth_nonce: parameter is a required string',
                 ProctorioConfig::OAUTH_NONCE,
                 '',
             ],
             [
-                'fullname is a required string with max 100 characters',
+                'fullname: parameter is a required string with max 100 characters',
                 ProctorioConfig::FULL_NAME,
                 str_repeat('-', 101),
             ],
             [
-                'exam_tag is a required string with max 100 characters',
+                'exam_tag: parameter is a required string with max 100 characters',
                 ProctorioConfig::EXAM_TAG,
                 str_repeat('-', 101),
-            ],
-        ];
-    }
-
-    /**
-     * @param string $configName
-     * @param callable $expected
-     *
-     * @dataProvider defaultConfigProvider
-     * @throws ProctorioParameterException
-     */
-    public function testValidateWillReturnDefaultValues(string $configName, callable $expected): void
-    {
-        $params = self::DEFAULT_VALUES;
-        $params[$configName] = null;
-
-        $config = $this->subject->validate('all', $params);
-
-        $this->assertTrue($expected($config[$configName]));
-    }
-
-    public function defaultConfigProvider(): array
-    {
-        return [
-            [
-                ProctorioConfig::OAUTH_SIGNATURE_METHOD,
-                function ($value) {
-                    return $value === ProctorioConfig::HMAC_SHA_1;
-                },
-            ],
-            [
-                ProctorioConfig::OAUTH_TIMESTAMP,
-                function ($value) {
-                    return is_numeric($value);
-                },
-            ],
-            [
-                ProctorioConfig::OAUTH_NONCE,
-                function ($value) {
-                    return strlen($value) === 36;
-                },
-            ],
-            [
-                ProctorioConfig::OAUTH_VERSION,
-                function ($value) {
-                    return $value === ProctorioConfig::DEFAULT_OAUTH_VERSION;
-                },
             ],
         ];
     }
@@ -238,6 +245,6 @@ class ProctorioConfigValidatorTest extends TestCase
         $this->expectException(ProctorioParameterException::class);
         $this->expectExceptionMessage('There is no validator for config [invalid]');
 
-        $this->subject->validate('all', ['invalid' => 0]);
+        $this->subject->validate(['invalid' => 0]);
     }
 }

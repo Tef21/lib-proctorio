@@ -28,12 +28,12 @@ use PHPUnit\Framework\TestCase;
 
 class ProctorioConfigTest extends TestCase
 {
-    private const LAUNCH_URL_CUSTOM_VALUE = 'launch_url_custom';
+    private const LAUNCH_URL_CUSTOM_VALUE = 'https://launch_url_custom';
     private const USER_ID_CUSTOM_VALUE = 'user_id_custom';
     private const OAUTH_CONSUMER_KEY_CUSTOM_VALUE = 'oauth_consumer_key_custom';
-    private const EXAM_START_CUSTOM_VALUE = 'exam_start_custom';
-    private const EXAM_TAKE_CUSTOM_VALUE = 'exam_take_custom';
-    private const EXAM_END_CUSTOM_VALUE = 'exam_end_custom';
+    private const EXAM_START_CUSTOM_VALUE = 'https://exam_start_custom';
+    private const EXAM_TAKE_CUSTOM_VALUE = 'https://exam_take_custom';
+    private const EXAM_END_CUSTOM_VALUE = 'https://exam_end_custom';
     private const EXAM_SETTINGS_CUSTOM_ELEMENT = 'recordaudio';
     private const EXAM_SETTINGS_CUSTOM_ELEMENT_2 = 'recordvideo';
     private const EXAM_SETTINGS_CUSTOM_VALUE = [

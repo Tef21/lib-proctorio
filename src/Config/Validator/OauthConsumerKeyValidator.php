@@ -29,14 +29,10 @@ class OauthConsumerKeyValidator implements ValidatorInterface
     /**
      * @inheritDoc
      */
-    public function validate(string $configName, $value)
+    public function validate($value): void
     {
         if (empty($value) || !is_string($value) || strlen($value) > 32) {
-            throw new ProctorioParameterException(
-                sprintf('%s is a required string with max 32 characters', $configName)
-            );
+            throw new ProctorioParameterException('parameter is a required string with max 32 characters');
         }
-
-        return $value;
     }
 }

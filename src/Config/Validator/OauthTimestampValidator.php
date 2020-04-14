@@ -29,19 +29,10 @@ class OauthTimestampValidator implements ValidatorInterface
     /**
      * @inheritDoc
      */
-    public function validate(string $configName, $value)
+    public function validate($value): void
     {
-        $value = $value ?? (string)time();
-
         if (!is_numeric($value)) {
-            throw new ProctorioParameterException(
-                sprintf(
-                    '%s must be numeric',
-                    $configName
-                )
-            );
+            throw new ProctorioParameterException('parameter must be numeric');
         }
-
-        return $value;
     }
 }

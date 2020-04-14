@@ -29,14 +29,10 @@ class UserIdValidator implements ValidatorInterface
     /**
      * @inheritDoc
      */
-    public function validate(string $configName, $value)
+    public function validate($value): void
     {
         if (empty($value) || !is_string($value) || strlen($value) > 36) {
-            throw new ProctorioParameterException(
-                sprintf('%s is a required string with max 36 characters', $configName)
-            );
+            throw new ProctorioParameterException('parameter is a required string with max 36 characters');
         }
-
-        return $value;
     }
 }
