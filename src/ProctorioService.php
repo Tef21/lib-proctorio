@@ -22,8 +22,9 @@ declare(strict_types=1);
 
 namespace oat\Proctorio;
 
-use GuzzleHttp\Exception\GuzzleException;
+use oat\Proctorio\Exception\InvalidProctorioResponseException;
 use oat\Proctorio\Exception\ProctorioParameterException;
+use oat\Proctorio\Response\ProctorioResponse;
 
 class ProctorioService implements RemoteProctoringInterface
 {
@@ -36,16 +37,19 @@ class ProctorioService implements RemoteProctoringInterface
     }
 
     /**
-     * @param array $parameters paramteres required by ProctorioConfig
-     * @param string $key oauthkey
+     * @param array $parameters $parameters required by ProctorioConfig
+     * @param string $key oauth key
      * @param string $secret oauth secret
      *
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \oat\Proctorio\Exception\ProctorioParameterException
+     * @return ProctorioResponse
+     *
+     * @throws InvalidProctorioResponseException
+     * @throws ProctorioParameterException
      */
-    public function callRemoteProctoring(array $parameters, string $key, string $secret): string
+    public function callRemoteProctoring(array $parameters, string $key, string $secret): ProctorioResponse
     {
         $config = new ProctorioConfig();
+
         return $this->provider->retrieve($config->configure($parameters, $key), $secret);
     }
 }

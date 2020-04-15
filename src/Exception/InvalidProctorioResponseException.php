@@ -20,11 +20,24 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio;
+namespace oat\Proctorio\Exception;
 
-use oat\Proctorio\Response\ProctorioResponse;
+use Exception;
 
-interface RemoteProctoringInterface
+class InvalidProctorioResponseException extends Exception
 {
-    public function callRemoteProctoring(array $config, string $key, string $secret): ProctorioResponse;
+    /** @var string */
+    private $responseData;
+
+    public function __construct(string $message, string $responseData)
+    {
+        parent::__construct($message, 0);
+
+        $this->responseData = $responseData;
+    }
+
+    public function getResponseData(): string
+    {
+        return $this->responseData;
+    }
 }

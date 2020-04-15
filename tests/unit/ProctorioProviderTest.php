@@ -24,15 +24,13 @@ namespace oat\Proctorio\tests\unit;
 
 use oat\Proctorio\ProctorioAccessProvider;
 use oat\Proctorio\ProctorioRequestHandler;
+use oat\Proctorio\Response\ProctorioResponse;
 use oat\Proctorio\SignatureBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 
 class ProctorioProviderTest extends TestCase
 {
-
     private const EXAMPLE_PAYLOAD = ['examplePayload' => 'WithSomeValues'];
     private const SECRET = 'secret';
     private const SIGNATURE_EXAMPLE = 'signature_example';
@@ -47,12 +45,8 @@ class ProctorioProviderTest extends TestCase
     /** @var ProctorioAccessProvider */
     private $subject;
 
-    /** @var ResponseInterface|MockObject */
-    private $responseMock;
-
     protected function setUp(): void
     {
-        $this->responseMock = $this->createMock(ResponseInterface::class);
         $this->proctorioRequestHandlerMock = $this->createMock(ProctorioRequestHandler::class);
         $this->signatureBuilderMock = $this->createMock(SignatureBuilder::class);
         $this->subject = new ProctorioAccessProvider(
@@ -63,6 +57,8 @@ class ProctorioProviderTest extends TestCase
 
     public function testRetrieve(): void
     {
+        $proctorioResponse = new ProctorioResponse('url1', 'url2');
+
         $this->signatureBuilderMock->expects($this->once())
             ->method('buildSignature')
             ->willReturn(self::SIGNATURE_EXAMPLE);
@@ -70,11 +66,11 @@ class ProctorioProviderTest extends TestCase
         $this->proctorioRequestHandlerMock->expects($this->once())
             ->method('execute')
             ->with('examplePayload=WithSomeValues&oauth_signature=signature_example')
-            ->willReturn($this->responseMock);
+            ->willReturn($proctorioResponse);
 
-        $streamMock = $this->createMock(StreamInterface::class);
-        $this->responseMock->expects($this->once())->method('getBody')->willReturn($streamMock);
-
-        $this->subject->retrieve(self::EXAMPLE_PAYLOAD, self::SECRET);
+        $this->assertSame(
+            $proctorioResponse,
+            $this->subject->retrieve(self::EXAMPLE_PAYLOAD, self::SECRET)
+        );
     }
 }
