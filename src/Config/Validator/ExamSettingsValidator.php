@@ -33,7 +33,7 @@ class ExamSettingsValidator implements ValidatorInterface
     public function validate($value): void
     {
         if (!is_array($value) || array_intersect($value, ProctorioConfig::VALID_EXAM_SETTINGS) !== $value) {
-            throw new ProctorioParameterException('parameter has to be array with valid settings');
+            throw new ProctorioParameterException('Parameter must be an array with valid settings');
         }
     }
 }

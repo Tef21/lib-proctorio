@@ -35,7 +35,7 @@ class OauthSignatureMethodValidator implements ValidatorInterface
         if ($value !== ProctorioConfig::HMAC_SHA_1) {
             throw new ProctorioParameterException(
                 sprintf(
-                    'parameter supports only %s',
+                    'Parameter supports only %s',
                     ProctorioConfig::HMAC_SHA_1
                 )
             );

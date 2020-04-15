@@ -27,63 +27,30 @@ use oat\Proctorio\ProctorioConfig;
 
 class ProctorioConfigValidator implements ValidatorInterface
 {
-    /** @var ValidatorInterface */
-    private $examSettingsValidator;
+    /** @var ValidatorInterface[] */
+    private $validators;
 
-    /** @var ValidatorInterface */
-    private $examTagValidator;
+    public function __construct(ValidatorInterface ...$validators)
+    {
+        if (empty($validators)) {
+            $validators = [
+                ProctorioConfig::LAUNCH_URL => new ExamUrlValidator(true, 500),
+                ProctorioConfig::USER_ID => new StringValidator(true, 36),
+                ProctorioConfig::OAUTH_CONSUMER_KEY => new StringValidator(true, 32),
+                ProctorioConfig::EXAM_START => new ExamUrlValidator(true, 500),
+                ProctorioConfig::EXAM_TAKE => new ExamUrlValidator(true, 1000),
+                ProctorioConfig::EXAM_END => new ExamUrlValidator(true, 500),
+                ProctorioConfig::EXAM_SETTINGS => new ExamSettingsValidator(),
+                ProctorioConfig::EXAM_TAG => new StringValidator(false, 100),
+                ProctorioConfig::FULL_NAME => new StringValidator(false, 100),
+                ProctorioConfig::OAUTH_SIGNATURE_METHOD => new OauthSignatureMethodValidator(),
+                ProctorioConfig::OAUTH_VERSION => new OauthVersionValidator(),
+                ProctorioConfig::OAUTH_TIMESTAMP => new OauthTimestampValidator(),
+                ProctorioConfig::OAUTH_NONCE => new StringValidator(true),
+            ];
+        }
 
-    /** @var ValidatorInterface */
-    private $examUrlValidator;
-
-    /** @var ValidatorInterface */
-    private $examTakeUrlValidator;
-
-    /** @var ValidatorInterface */
-    private $oauthConsumerKeyValidator;
-
-    /** @var ValidatorInterface */
-    private $oauthNonceValidator;
-
-    /** @var ValidatorInterface */
-    private $oauthSignatureMethodValidator;
-
-    /** @var ValidatorInterface */
-    private $oauthTimestampValidator;
-
-    /** @var ValidatorInterface */
-    private $oauthVersionValidator;
-
-    /** @var ValidatorInterface */
-    private $userFullNameValidator;
-
-    /** @var ValidatorInterface */
-    private $userIdValidator;
-
-    public function __construct(
-        ValidatorInterface $examSettingsValidator = null,
-        ValidatorInterface $examTagValidator = null,
-        ValidatorInterface $examUrlValidator = null,
-        ValidatorInterface $examTakeUrlValidator = null,
-        ValidatorInterface $oauthConsumerKeyValidator = null,
-        ValidatorInterface $oauthNonceValidator = null,
-        ValidatorInterface $oauthSignatureMethodValidator = null,
-        ValidatorInterface $oauthTimestampValidator = null,
-        ValidatorInterface $oauthVersionValidator = null,
-        ValidatorInterface $userFullNameValidator = null,
-        ValidatorInterface $userIdValidator = null
-    ) {
-        $this->examSettingsValidator = $examSettingsValidator ?? new ExamSettingsValidator();
-        $this->examTagValidator = $examTagValidator ?? new ExamTagValidator();
-        $this->examUrlValidator = $examUrlValidator ?? new ExamUrlValidator(500);
-        $this->examTakeUrlValidator = $launchUrlValidator ?? new ExamUrlValidator(1000);
-        $this->oauthConsumerKeyValidator = $oauthConsumerKeyValidator ?? new OauthConsumerKeyValidator();
-        $this->oauthNonceValidator = $oauthNonceValidator ?? new OauthNonceValidator();
-        $this->oauthSignatureMethodValidator = $oauthSignatureMethodValidator ?? new OauthSignatureMethodValidator();
-        $this->oauthTimestampValidator = $oauthTimestampValidator ?? new OauthTimestampValidator();
-        $this->oauthVersionValidator = $oauthVersionValidator ?? new OauthVersionValidator();
-        $this->userFullNameValidator = $userFullNameValidator ?? new UserFullNameValidator();
-        $this->userIdValidator = $userIdValidator ?? new UserIdValidator();
+        $this->validators = $validators;
     }
 
     /**
@@ -91,11 +58,9 @@ class ProctorioConfigValidator implements ValidatorInterface
      */
     public function validate($value): void
     {
-        $validators = $this->getValidators();
-
         foreach ($value as $configName => $configValue) {
             /** @var ValidatorInterface $validator */
-            $validator = $validators[$configName] ?? null;
+            $validator = $this->validators[$configName] ?? null;
 
             if ($validator === null) {
                 throw new ProctorioParameterException(
@@ -108,31 +73,12 @@ class ProctorioConfigValidator implements ValidatorInterface
             } catch (ProctorioParameterException $exception) {
                 throw new ProctorioParameterException(
                     sprintf(
-                        '%s: %s',
+                        'Invalid [%s]: %s',
                         $configName,
                         $exception->getMessage()
                     )
                 );
             }
         }
-    }
-
-    private function getValidators(): array
-    {
-        return [
-            ProctorioConfig::LAUNCH_URL => $this->examUrlValidator,
-            ProctorioConfig::USER_ID => $this->userIdValidator,
-            ProctorioConfig::OAUTH_CONSUMER_KEY => $this->oauthConsumerKeyValidator,
-            ProctorioConfig::EXAM_START => $this->examUrlValidator,
-            ProctorioConfig::EXAM_TAKE => $this->examTakeUrlValidator,
-            ProctorioConfig::EXAM_END => $this->examUrlValidator,
-            ProctorioConfig::EXAM_SETTINGS => $this->examSettingsValidator,
-            ProctorioConfig::EXAM_TAG => $this->examTagValidator,
-            ProctorioConfig::FULL_NAME => $this->userFullNameValidator,
-            ProctorioConfig::OAUTH_SIGNATURE_METHOD => $this->oauthSignatureMethodValidator,
-            ProctorioConfig::OAUTH_VERSION => $this->oauthVersionValidator,
-            ProctorioConfig::OAUTH_TIMESTAMP => $this->oauthTimestampValidator,
-            ProctorioConfig::OAUTH_NONCE => $this->oauthNonceValidator,
-        ];
     }
 }

@@ -32,7 +32,7 @@ class OauthVersionValidator implements ValidatorInterface
     public function validate($value): void
     {
         if ($value !== '1.0') {
-            throw new ProctorioParameterException('parameter must be 1.0');
+            throw new ProctorioParameterException('Parameter must be 1.0');
         }
     }
 }

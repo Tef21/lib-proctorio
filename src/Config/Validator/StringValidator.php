@@ -24,15 +24,40 @@ namespace oat\Proctorio\Config\Validator;
 
 use oat\Proctorio\Exception\ProctorioParameterException;
 
-class UserIdValidator implements ValidatorInterface
+class StringValidator implements ValidatorInterface
 {
+    /** @var int */
+    private $maxLength;
+
+    /** @var bool */
+    private $required;
+
+    public function __construct(bool $required = false, int $maxLength = 0)
+    {
+        $this->maxLength = $maxLength;
+        $this->required = $required;
+    }
+
     /**
      * @inheritDoc
      */
     public function validate($value): void
     {
-        if (empty($value) || !is_string($value) || strlen($value) > 36) {
-            throw new ProctorioParameterException('parameter is a required string with max 36 characters');
+        if ($this->required && empty($value)) {
+            throw new ProctorioParameterException('Mandatory parameter');
+        }
+
+        if ($value !== null && !is_string($value)) {
+            throw new ProctorioParameterException('Parameter must be a string');
+        }
+
+        if (!empty($value) && $this->maxLength > 0 && strlen($value) > $this->maxLength) {
+            throw new ProctorioParameterException(
+                sprintf(
+                    'Parameter with max length of %s characters',
+                    $this->maxLength
+                )
+            );
         }
     }
 }

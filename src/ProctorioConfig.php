@@ -99,7 +99,7 @@ class ProctorioConfig
 
     public function __construct(ProctorioConfigValidator $validator = null)
     {
-        $this->validator = $validator ?? new ProctorioConfigValidator();
+        $this->validator = $validator ?? new ProctorioConfigValidator(...[]);
     }
 
     /**

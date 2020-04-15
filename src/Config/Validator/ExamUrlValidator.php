@@ -24,33 +24,17 @@ namespace oat\Proctorio\Config\Validator;
 
 use oat\Proctorio\Exception\ProctorioParameterException;
 
-class ExamUrlValidator implements ValidatorInterface
+class ExamUrlValidator extends StringValidator
 {
-    /** @var int */
-    private $maxLength;
-
-    public function __construct(int $maxLength)
-    {
-        $this->maxLength = $maxLength;
-    }
-
     /**
      * @inheritDoc
      */
     public function validate($value): void
     {
-        if (
-            empty($value)
-            || !is_string($value)
-            || (strpos($value, 'https://') !== 0 && strpos($value, 'https\:\/\/') !== 0)
-            || strlen($value) > $this->maxLength
-        ) {
-            throw new ProctorioParameterException(
-                sprintf(
-                    'parameter must contain a valid https url with max %s characters',
-                    $this->maxLength
-                )
-            );
+        parent::validate($value);
+
+        if (strpos($value, 'https://') !== 0 && strpos($value, 'https\:\/\/') !== 0) {
+            throw new ProctorioParameterException('Parameter must contain a valid https url');
         }
     }
 }
