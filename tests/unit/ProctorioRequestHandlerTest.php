@@ -142,7 +142,7 @@ class ProctorioRequestHandlerTest extends TestCase
     /**
      * @dataProvider invalidResponseCodeProvider
      */
-    public function testexecuteRequestReturnsInvalidResponseCode(int $responseCode, string $expectedMessage): void
+    public function testExecuteRequestReturnsInvalidResponseCode(int $responseCode, string $expectedMessage): void
     {
         $responseData = json_encode([$responseCode, $expectedMessage]);
 
