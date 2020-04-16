@@ -74,7 +74,8 @@ class ProctorioConfig
         'agentreentry',
         'calculatorbasic',
         'calculatorsci',
-        'whiteboard'
+        'whiteboard',
+        'webtraffic'
     ];
     private const ORDERED_PARAMS = [
         self::LAUNCH_URL,
