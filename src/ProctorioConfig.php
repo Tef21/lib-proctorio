@@ -22,7 +22,8 @@ declare(strict_types=1);
 
 namespace oat\Proctorio;
 
-use Exception;
+use oat\Proctorio\Config\Validator\ProctorioConfigValidator;
+use oat\Proctorio\Config\Validator\ValidatorInterface;
 use oat\Proctorio\Exception\ProctorioParameterException;
 use Ramsey\Uuid\Uuid;
 
@@ -45,72 +46,61 @@ class ProctorioConfig
     public const OAUTH_NONCE = 'oauth_nonce';
     public const HMAC_SHA_1 = 'HMAC-SHA1';
     public const DEFAULT_OAUTH_VERSION = '1.0';
-
-    private const MANDATORY_FIELD = 'mandatory';
+    public const VALID_EXAM_SETTINGS = [
+        'recordvideo',
+        'recordaudio',
+        'recordscreen',
+        'recordwebtraffic',
+        'recordroomstart',
+        'verifyvideo',
+        'verifyaudio',
+        'verifydesktop',
+        'verifyidauto',
+        'verifyidlive',
+        'verifysignature',
+        'fullscreenlenient',
+        'fullscreenmoderate',
+        'fullscreensevere',
+        'clipboard',
+        'notabs',
+        'linksonly',
+        'closetabs',
+        'onescreen',
+        'print',
+        'downloads',
+        'cache',
+        'rightclick',
+        'noreentry',
+        'agentreentry',
+        'calculatorbasic',
+        'calculatorsci',
+        'whiteboard',
+        'webtraffic'
+    ];
+    private const ORDERED_PARAMS = [
+        self::LAUNCH_URL,
+        self::USER_ID,
+        self::OAUTH_CONSUMER_KEY,
+        self::EXAM_START,
+        self::EXAM_TAKE,
+        self::EXAM_END,
+        self::EXAM_SETTINGS,
+        self::FULL_NAME,
+        self::EXAM_TAG,
+        self::OAUTH_SIGNATURE_METHOD,
+        self::OAUTH_VERSION,
+        self::OAUTH_TIMESTAMP,
+        self::OAUTH_NONCE,
+    ];
 
     /**
-     * Proctorio require array in specific order
-     * Each parameter may have default value
-     * Default value will be set when no field param provided
-     * When parameter is not set and
-     * it doesn't have default value and is not mandatory
-     * it will be omitted
-     *
-     * @throws ProctorioParameterException
-     * @throws Exception
+     * @var ValidatorInterface
      */
-    private function getProctorioOrderedParams(): array
+    private $validator;
+
+    public function __construct(ProctorioConfigValidator $validator = null)
     {
-        return [
-            self::LAUNCH_URL => self::MANDATORY_FIELD,
-            self::USER_ID => self::MANDATORY_FIELD,
-            self::OAUTH_CONSUMER_KEY => self::MANDATORY_FIELD,
-            self::EXAM_START => self::MANDATORY_FIELD,
-            self::EXAM_TAKE => self::MANDATORY_FIELD,
-            self::EXAM_END => self::MANDATORY_FIELD,
-            self::EXAM_SETTINGS => self::MANDATORY_FIELD,
-            self::FULL_NAME => null,
-            self::EXAM_TAG => null,
-            self::OAUTH_SIGNATURE_METHOD => self::HMAC_SHA_1,
-            self::OAUTH_VERSION => self::DEFAULT_OAUTH_VERSION,
-            self::OAUTH_TIMESTAMP => (string) time(),
-            self::OAUTH_NONCE => Uuid::uuid4()->toString(),
-        ];
-    }
-
-    /**
-     * @throws ProctorioParameterException
-     */
-    private function createOrderedParamteres(array $parameters): array
-    {
-        $proctorioParameters = [];
-        foreach ($this->getProctorioOrderedParams() as $paramName => $default) {
-            if ($default === self::MANDATORY_FIELD && empty($parameters[$paramName])) {
-                throw new ProctorioParameterException(
-                    sprintf('Mandatory field %s missing', $paramName)
-                );
-            }
-
-            if ($paramName === ProctorioConfig::EXAM_SETTINGS) {
-                if (!is_array($parameters[$paramName])) {
-                    throw new ProctorioParameterException('exam_settings has to be array');
-                }
-
-                $proctorioParameters[$paramName] = implode(',', array_map('trim', $parameters[$paramName]));
-                continue;
-            }
-
-            if (!empty($parameters[$paramName])) {
-                $proctorioParameters[$paramName] = $parameters[$paramName];
-                continue;
-            }
-
-            if ($default !== null) {
-                $proctorioParameters[$paramName] = $default;
-            }
-        }
-
-        return $proctorioParameters;
+        $this->validator = $validator ?? new ProctorioConfigValidator(...[]);
     }
 
     /**
@@ -119,7 +109,49 @@ class ProctorioConfig
      */
     public function configure(array $parameters, string $key): array
     {
+        $parameters = $this->configDefaultParameters($parameters);
         $parameters[self::OAUTH_CONSUMER_KEY] = $key;
-        return $this->createOrderedParamteres($parameters);
+        $parameters = $this->sortParameters($parameters);
+
+        $this->validator->validate($parameters);
+
+        return $this->prepareParametersValues($parameters);
+    }
+
+    private function prepareParametersValues(array $parameters): array
+    {
+        $parameters[self::EXAM_SETTINGS] = implode(
+            ',',
+            array_map(
+                'trim',
+                $parameters[self::EXAM_SETTINGS]
+            )
+        );
+
+        return array_filter($parameters);
+    }
+
+    private function sortParameters(array $parameters): array
+    {
+        $orderedParameters = [];
+
+        foreach (self::ORDERED_PARAMS as $key) {
+            $orderedParameters[$key] = $parameters[$key] ?? null;
+        }
+
+        return $orderedParameters;
+    }
+
+    private function configDefaultParameters(array $parameters): array
+    {
+        return array_replace_recursive(
+            [
+                self::OAUTH_NONCE => Uuid::uuid4()->toString(),
+                self::OAUTH_SIGNATURE_METHOD => ProctorioConfig::HMAC_SHA_1,
+                self::OAUTH_TIMESTAMP => (string)time(),
+                self::OAUTH_VERSION => ProctorioConfig::DEFAULT_OAUTH_VERSION,
+            ],
+            array_filter($parameters)
+        );
     }
 }

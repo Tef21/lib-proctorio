@@ -20,11 +20,29 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio;
+namespace oat\Proctorio\Response;
 
-use oat\Proctorio\Response\ProctorioResponse;
-
-interface RemoteProctoringInterface
+class ProctorioResponse
 {
-    public function callRemoteProctoring(array $config, string $key, string $secret): ProctorioResponse;
+    /** @var string */
+    private $testTakerUrl;
+
+    /** @var string */
+    private $testReviewerUrl;
+
+    public function __construct(string $testTakerUrl, string $testReviewerUrl)
+    {
+        $this->testTakerUrl = $testTakerUrl;
+        $this->testReviewerUrl = $testReviewerUrl;
+    }
+
+    public function getTestTakerUrl(): string
+    {
+        return $this->testTakerUrl;
+    }
+
+    public function getTestReviewerUrl(): string
+    {
+        return $this->testReviewerUrl;
+    }
 }

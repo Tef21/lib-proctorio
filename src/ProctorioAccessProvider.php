@@ -22,7 +22,8 @@ declare(strict_types=1);
 
 namespace oat\Proctorio;
 
-use GuzzleHttp\Exception\GuzzleException;
+use oat\Proctorio\Exception\InvalidProctorioResponseException;
+use oat\Proctorio\Response\ProctorioResponse;
 
 class ProctorioAccessProvider
 {
@@ -43,15 +44,13 @@ class ProctorioAccessProvider
     }
 
     /**
-     * @throws GuzzleException
+     * @throws InvalidProctorioResponseException
      */
-    public function retrieve(array $payload, string $secret): string
+    public function retrieve(array $payload, string $secret): ProctorioResponse
     {
         $payload['oauth_signature'] = $this->signatureBuilder->buildSignature($payload, $secret);
         $requestPayloadString = http_build_query($payload);
 
-        $response = $this->requestHandler->execute($requestPayloadString);
-
-        return (string) $response->getBody();
+        return $this->requestHandler->execute($requestPayloadString);
     }
 }

@@ -26,10 +26,22 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
-use Psr\Http\Message\ResponseInterface;
+use oat\Proctorio\Exception\InvalidProctorioResponseException;
+use oat\Proctorio\Response\ProctorioResponse;
 
 class ProctorioRequestHandler
 {
+    private const RESPONSE_CODES = [
+        2653 => 'Missing required parameters',
+        2654 => 'Invalid parameter',
+        2655 => 'Incorrect consumer key',
+        2656 => 'Signature is invalid',
+        2657 => 'The used timestamp is out of range',
+        2658 => 'Invalid exam tag ID',
+        2659 => 'Invalid settings',
+        2660 => 'Unknown'
+    ];
+
     /** @var string $url */
     private $url;
 
@@ -46,24 +58,66 @@ class ProctorioRequestHandler
     }
 
     /**
-     * @throws GuzzleException
+     * @throws InvalidProctorioResponseException
      */
-    public function execute(string $payload): ResponseInterface
+    public function execute(string $payload): ProctorioResponse
     {
-        $request = new Request(
-            'POST',
-            $this->url,
-            [
-                'headers' => [
+        try {
+            $request = new Request(
+                'POST',
+                $this->url,
+                [
+                    'headers' => [
                         'Content-Type' => 'application/x-www-form-urlencoded',
                     ],
-                'curl' => [
-                    CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+                    'curl' => [
+                        CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+                    ],
                 ],
-            ],
-            $payload
-        );
+                $payload
+            );
 
-        return $this->httpClient->send($request);
+            $response = (string)$this->httpClient
+                ->send($request)
+                ->getBody();
+
+            $responseParts = $this->getResponseParts($response);
+
+            return new ProctorioResponse(
+                $responseParts[0],
+                $responseParts[1]
+            );
+        } catch (GuzzleException $exception) {
+            throw new InvalidProctorioResponseException(
+                'Invalid Proctorio response',
+                $exception->getMessage()
+            );
+        }
+    }
+
+    /**
+     * @throws InvalidProctorioResponseException
+     */
+    private function getResponseParts(string $response): array
+    {
+        $data = json_decode($response, true);
+
+        if (count($data) !== 2) {
+            throw new InvalidProctorioResponseException(
+                'Invalid Proctorio response',
+                $response
+            );
+        }
+
+        $firstResponsePart = current($data);
+
+        if (in_array($firstResponsePart, array_keys(self::RESPONSE_CODES), true)) {
+            throw new InvalidProctorioResponseException(
+                self::RESPONSE_CODES[$firstResponsePart],
+                $response
+            );
+        }
+
+        return $data;
     }
 }
