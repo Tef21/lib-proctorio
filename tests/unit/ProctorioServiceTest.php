@@ -25,30 +25,34 @@ namespace oat\Proctorio\tests\unit;
 use oat\Proctorio\ProctorioConfig;
 use oat\Proctorio\ProctorioAccessProvider;
 use oat\Proctorio\ProctorioService;
+use oat\Proctorio\Response\ProctorioResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ProctorioServiceTest extends TestCase
 {
-    private const LAUNCH_URL_CUSTOM_VALUE = 'launch_url_custom';
     private const OAUTH_CONSUMER_KEY_CUSTOM_VALUE = 'oauth_consumer_key_custom';
     private const USER_ID_CUSTOM_VALUE = 'user_id_custom';
-    private const EXAM_TAKE_CUSTOM_VALUE = 'exam_take_custom';
-    private const EXAM_SETTINGS_EXAMPLE = 'settings_example';
-    private const EXAM_END_CUSTOM_VALUE = 'exam_end_custom';
+    private const LAUNCH_URL_CUSTOM_VALUE = 'https://launch_url_custom';
+    private const EXAM_END_CUSTOM_VALUE = 'https://exam_end_custom';
+    private const EXAM_TAKE_CUSTOM_VALUE = 'https://exam_take_custom';
+    private const EXAM_SETTINGS_EXAMPLE = [
+        'recordaudio',
+        'recordvideo'
+    ];
     private const SECRET = 'secret';
 
     private const CONFIG_EXAMPLE = [
-        ProctorioConfig::LAUNCH_URL  => self::LAUNCH_URL_CUSTOM_VALUE,
-        ProctorioConfig::USER_ID  => self::USER_ID_CUSTOM_VALUE,
-        ProctorioConfig::OAUTH_CONSUMER_KEY  => self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE,
-        ProctorioConfig::EXAM_START  => self::LAUNCH_URL_CUSTOM_VALUE,
-        ProctorioConfig::EXAM_TAKE  => self::EXAM_TAKE_CUSTOM_VALUE,
+        ProctorioConfig::LAUNCH_URL => self::LAUNCH_URL_CUSTOM_VALUE,
+        ProctorioConfig::USER_ID => self::USER_ID_CUSTOM_VALUE,
+        ProctorioConfig::OAUTH_CONSUMER_KEY => self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE,
+        ProctorioConfig::EXAM_START => self::LAUNCH_URL_CUSTOM_VALUE,
+        ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
         ProctorioConfig::EXAM_END => self::EXAM_END_CUSTOM_VALUE,
-        ProctorioConfig::EXAM_SETTINGS  => self::EXAM_SETTINGS_EXAMPLE,
-        ProctorioConfig::OAUTH_SIGNATURE_METHOD  => 'HMAC-SHA1',
-        ProctorioConfig::OAUTH_VERSION  => '1.0',
-        ProctorioConfig::OAUTH_TIMESTAMP  => 'time',
+        ProctorioConfig::EXAM_SETTINGS => 'recordaudio,recordvideo',
+        ProctorioConfig::OAUTH_SIGNATURE_METHOD => 'HMAC-SHA1',
+        ProctorioConfig::OAUTH_VERSION => '1.0',
+        ProctorioConfig::OAUTH_TIMESTAMP => '1586522824',
         ProctorioConfig::OAUTH_NONCE => 'nonce',
     ];
 
@@ -58,9 +62,9 @@ class ProctorioServiceTest extends TestCase
         ProctorioConfig::EXAM_START => self::LAUNCH_URL_CUSTOM_VALUE,
         ProctorioConfig::EXAM_END => self::EXAM_END_CUSTOM_VALUE,
         ProctorioConfig::EXAM_TAKE => self::EXAM_TAKE_CUSTOM_VALUE,
-        ProctorioConfig::OAUTH_TIMESTAMP  => 'time',
+        ProctorioConfig::OAUTH_TIMESTAMP => '1586522824',
         ProctorioConfig::OAUTH_NONCE => 'nonce',
-        ProctorioConfig::EXAM_SETTINGS  => [self::EXAM_SETTINGS_EXAMPLE],
+        ProctorioConfig::EXAM_SETTINGS => self::EXAM_SETTINGS_EXAMPLE,
     ];
 
     /** @var ProctorioAccessProvider|MockObject */
@@ -68,7 +72,6 @@ class ProctorioServiceTest extends TestCase
 
     /** @var ProctorioService */
     private $subject;
-
 
     protected function setUp(): void
     {
@@ -80,11 +83,20 @@ class ProctorioServiceTest extends TestCase
 
     public function testCallRemoteProctoring(): void
     {
-        $this->proctorioProviderMock->expects($this->once())
+        $expectedResponse = new ProctorioResponse('url1', 'url2');
+
+        $this->proctorioProviderMock
+            ->expects($this->once())
             ->method('retrieve')
             ->with(self::CONFIG_EXAMPLE, self::SECRET)
-            ->willReturn('string');
-        // Execute
-        $this->subject->callRemoteProctoring(self::PARAMS_EXAMPLE, self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE, self::SECRET);
+            ->willReturn($expectedResponse);
+
+        $this->assertSame($expectedResponse,
+            $this->subject->callRemoteProctoring(
+                self::PARAMS_EXAMPLE,
+                self::OAUTH_CONSUMER_KEY_CUSTOM_VALUE,
+                self::SECRET
+            )
+        );
     }
 }

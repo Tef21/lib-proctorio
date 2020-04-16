@@ -20,36 +20,16 @@
 
 declare(strict_types=1);
 
-namespace oat\Proctorio;
+namespace oat\Proctorio\Config\Validator;
 
-use oat\Proctorio\Exception\InvalidProctorioResponseException;
 use oat\Proctorio\Exception\ProctorioParameterException;
-use oat\Proctorio\Response\ProctorioResponse;
 
-class ProctorioService implements RemoteProctoringInterface
+interface ValidatorInterface
 {
-    /** @var ProctorioAccessProvider $provider */
-    private $provider;
-
-    public function __construct(ProctorioAccessProvider $proctorioProvider = null)
-    {
-        $this->provider = $proctorioProvider ?? new ProctorioAccessProvider();
-    }
-
     /**
-     * @param array $parameters $parameters required by ProctorioConfig
-     * @param string $key oauth key
-     * @param string $secret oauth secret
+     * @param mixed $value
      *
-     * @return ProctorioResponse
-     *
-     * @throws InvalidProctorioResponseException
      * @throws ProctorioParameterException
      */
-    public function callRemoteProctoring(array $parameters, string $key, string $secret): ProctorioResponse
-    {
-        $config = new ProctorioConfig();
-
-        return $this->provider->retrieve($config->configure($parameters, $key), $secret);
-    }
+    public function validate($value): void;
 }

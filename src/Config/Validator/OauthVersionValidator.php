@@ -15,16 +15,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 declare(strict_types=1);
 
-namespace oat\Proctorio;
+namespace oat\Proctorio\Config\Validator;
 
-use oat\Proctorio\Response\ProctorioResponse;
+use oat\Proctorio\Exception\ProctorioParameterException;
 
-interface RemoteProctoringInterface
+class OauthVersionValidator implements ValidatorInterface
 {
-    public function callRemoteProctoring(array $config, string $key, string $secret): ProctorioResponse;
+    /**
+     * @inheritDoc
+     */
+    public function validate($value): void
+    {
+        if ($value !== '1.0') {
+            throw new ProctorioParameterException('Parameter must be 1.0');
+        }
+    }
 }

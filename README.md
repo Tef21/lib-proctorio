@@ -64,7 +64,8 @@ $params = [
     ProctorioConfig::EXAM_SETTINGS => ['webtraffic']
 ];
 
-$urls = $proctorioService->callRemoteProctoring($params, 'your_oauth_key', 'your_oauth_secret');
-}
+$proctorioResponse = $proctorioService->callRemoteProctoring($params, 'your_oauth_key', 'your_oauth_secret');
 
+echo $proctorioResponse->getTestTakerUrl();
+echo $proctorioResponse->getTestReviewerUrl();
 ```
